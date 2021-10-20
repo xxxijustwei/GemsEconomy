@@ -153,7 +153,7 @@ public class EconomyCommand implements CommandExecutor {
                         } else {
                             sender.sendMessage(Message.getTargetInsufficientFunds()
                                     .replace("{currencycolor}", currency.getColor() + "")
-                                    .replace("{currency}", currency.getPlural())
+                                    .replace("{currency}", currency.getIdentifier())
                                     .replace("{target}", target.getDisplayName()));
                         }
                     } else {

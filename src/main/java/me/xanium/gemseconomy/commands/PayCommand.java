@@ -52,11 +52,11 @@ public class PayCommand implements CommandExecutor {
                 double amount;
 
                 if (!currency.isPayable()) {
-                    sender.sendMessage(Message.getCurrencyNotPayable().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getPlural()));
+                    sender.sendMessage(Message.getCurrencyNotPayable().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getIdentifier()));
                     return;
                 }
-                if (!sender.hasPermission("gemseconomy.command.pay." + currency.getPlural().toLowerCase()) && !sender.hasPermission("gemseconomy.command.pay." + currency.getSingular().toLowerCase())) {
-                    sender.sendMessage(Message.getPayNoPerms().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getPlural()));
+                if (!sender.hasPermission("gemseconomy.command.pay." + currency.getIdentifier().toLowerCase()) && !sender.hasPermission("gemseconomy.command.pay." + currency.getIdentifier().toLowerCase())) {
+                    sender.sendMessage(Message.getPayNoPerms().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getIdentifier()));
                     return;
                 }
                 if (currency.isDecimalSupported()) {
@@ -102,7 +102,7 @@ public class PayCommand implements CommandExecutor {
                                     }
                                     sender.sendMessage(Message.getPayerMessage().replace("{currencycolor}", currency.getColor() + "").replace("{amount}", currency.format(amount)).replace("{player}", target.getDisplayName()));
                                 } else {
-                                    sender.sendMessage(Message.getInsufficientFunds().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getPlural()));
+                                    sender.sendMessage(Message.getInsufficientFunds().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getIdentifier()));
                                 }
                             } else {
                                 sender.sendMessage(Message.getCannotReceive().replace("{player}", target.getDisplayName()));

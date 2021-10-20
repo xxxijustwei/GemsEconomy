@@ -20,7 +20,7 @@ public class CachedTopList {
     }
 
     public boolean matches(Currency currency, int offset, int amount) {
-        return currency.getUuid().equals(this.getCurrency().getUuid()) && offset == this.getOffset() && amount == this.getAmount();
+        return currency.getUUID().equals(this.getCurrency().getUUID()) && offset == this.getOffset() && amount == this.getAmount();
     }
 
     public boolean isExpired() {

@@ -55,29 +55,30 @@ public class CurrencyCommand implements CommandExecutor {
                 String cmd = args[0];
                 if (cmd.equalsIgnoreCase("create")) {
                     if (args.length == 3) {
-                        String single = args[1];
-                        String plural = args[2];
-                        if (plugin.getCurrencyManager().currencyExist(single) || plugin.getCurrencyManager().currencyExist(plural)) {
+                        String identifier = args[1];
+                        String displayName = args[2];
+                        if (plugin.getCurrencyManager().currencyExist(identifier)) {
                             sender.sendMessage(Message.getPrefix() + "§cCurrency already exists.");
                             return;
                         }
 
-                        plugin.getCurrencyManager().createNewCurrency(single, plural);
-                        sender.sendMessage(Message.getPrefix() + "§7Created currency: §a" + single);
+                        plugin.getCurrencyManager().createNewCurrency(identifier, displayName);
+                        sender.sendMessage(Message.getPrefix() + "§7Created currency: §a" + identifier);
                     } else {
                         sender.sendMessage(Message.getCurrencyUsage_Create());
                     }
                 } else if (cmd.equalsIgnoreCase("list")) {
                     sender.sendMessage(Message.getPrefix() + "§7There are §f" + plugin.getCurrencyManager().getCurrencies().size() + "§7 currencies.");
                     for (Currency currency : plugin.getCurrencyManager().getCurrencies()) {
-                        sender.sendMessage("§a§l>> §e" + currency.getSingular());
+                        sender.sendMessage("§a§l>> §e" + currency.getIdentifier());
                     }
                 } else if (cmd.equalsIgnoreCase("view")) {
                     if (args.length == 2) {
                         Currency currency = plugin.getCurrencyManager().getCurrency(args[1]);
                         if (currency != null) {
-                            sender.sendMessage(Message.getPrefix() + "§7ID: §c" + currency.getUuid().toString());
-                            sender.sendMessage(Message.getPrefix() + "§7Singular: §a" + currency.getSingular() + "§7, Plural: §a" + currency.getPlural());
+                            sender.sendMessage(Message.getPrefix() + "§7ID: §c" + currency.getUUID().toString());
+                            sender.sendMessage(Message.getPrefix() + "§7Identifier: §a" + currency.getIdentifier());
+                            sender.sendMessage(Message.getPrefix() + "§7DisplayName: §a" + currency.getDisplayName());
                             sender.sendMessage(Message.getPrefix() + "§7Start Balance: " + currency.getColor() + currency.format(currency.getDefaultBalance()) + "§7.");
                             sender.sendMessage(Message.getPrefix() + "§7Decimals: " + (currency.isDecimalSupported() ? "§aYes" : "§cNo"));
                             sender.sendMessage(Message.getPrefix() + "§7Default: " + (currency.isDefaultCurrency() ? "§aYes" : "§cNo"));
@@ -120,7 +121,7 @@ public class CurrencyCommand implements CommandExecutor {
                                 }
                             }
                             currency.setDefaultBalance(amount);
-                            sender.sendMessage(Message.getPrefix() + "§7Starting balance for §f" + currency.getPlural() + " §7set: §a" + UtilString.format(currency.getDefaultBalance()));
+                            sender.sendMessage(Message.getPrefix() + "§7Starting balance for §f" + currency.getIdentifier() + " §7set: §a" + UtilString.format(currency.getDefaultBalance()));
                             plugin.getDataStore().saveCurrency(currency);
                         } else {
                             sender.sendMessage(Message.getUnknownCurrency());
@@ -138,7 +139,7 @@ public class CurrencyCommand implements CommandExecutor {
                                     throw new Exception();
                                 }
                                 currency.setColor(color);
-                                sender.sendMessage(Message.getPrefix() + "§7Color for §f" + currency.getPlural() + " §7updated: " + color + color.name());
+                                sender.sendMessage(Message.getPrefix() + "§7Color for §f" + currency.getIdentifier() + " §7updated: " + color + color.name());
                                 plugin.getDataStore().saveCurrency(currency);
                             } catch (Exception ex) {
                                 sender.sendMessage(Message.getPrefix() + "§cInvalid chat color.");
@@ -173,11 +174,11 @@ public class CurrencyCommand implements CommandExecutor {
                             String symbol = args[2];
                             if (symbol.equalsIgnoreCase("remove")) {
                                 currency.setSymbol(null);
-                                sender.sendMessage(Message.getPrefix() + "§7Currency symbol removed for §f" + currency.getPlural());
+                                sender.sendMessage(Message.getPrefix() + "§7Currency symbol removed for §f" + currency.getIdentifier());
                                 plugin.getDataStore().saveCurrency(currency);
                             } else if (symbol.length() == 1) {
                                 currency.setSymbol(symbol);
-                                sender.sendMessage(Message.getPrefix() + "§7Currency symbol for §f" + currency.getPlural() + " §7updated: §a" + symbol);
+                                sender.sendMessage(Message.getPrefix() + "§7Currency symbol for §f" + currency.getIdentifier() + " §7updated: §a" + symbol);
                                 plugin.getDataStore().saveCurrency(currency);
                             } else {
                                 sender.sendMessage(Message.getPrefix() + "§7Symbol must be 1 character, or remove it with \"remove\".");
@@ -198,7 +199,7 @@ public class CurrencyCommand implements CommandExecutor {
                                 plugin.getDataStore().saveCurrency(c);
                             }
                             currency.setDefaultCurrency(true);
-                            sender.sendMessage(Message.getPrefix() + "§7Set default currency to §f" + currency.getPlural());
+                            sender.sendMessage(Message.getPrefix() + "§7Set default currency to §f" + currency.getIdentifier());
                             plugin.getDataStore().saveCurrency(currency);
                         } else {
                             sender.sendMessage(Message.getUnknownCurrency());
@@ -211,7 +212,7 @@ public class CurrencyCommand implements CommandExecutor {
                         Currency currency = plugin.getCurrencyManager().getCurrency(args[1]);
                         if (currency != null) {
                             currency.setPayable(!currency.isPayable());
-                            sender.sendMessage(Message.getPrefix() + "§7Toggled payability for §f" + currency.getPlural() + "§7: " + (currency.isPayable() ? "§aYes" : "§cNo"));
+                            sender.sendMessage(Message.getPrefix() + "§7Toggled payability for §f" + currency.getIdentifier() + "§7: " + (currency.isPayable() ? "§aYes" : "§cNo"));
                             plugin.getDataStore().saveCurrency(currency);
                         } else {
                             sender.sendMessage(Message.getUnknownCurrency());
@@ -224,7 +225,7 @@ public class CurrencyCommand implements CommandExecutor {
                         Currency currency = plugin.getCurrencyManager().getCurrency(args[1]);
                         if (currency != null) {
                             currency.setDecimalSupported(!currency.isDecimalSupported());
-                            sender.sendMessage(Message.getPrefix() + "§7Toggled Decimal Support for §f" + currency.getPlural() + "§7: " + (currency.isDecimalSupported() ? "§aYes" : "§cNo"));
+                            sender.sendMessage(Message.getPrefix() + "§7Toggled Decimal Support for §f" + currency.getIdentifier() + "§7: " + (currency.isDecimalSupported() ? "§aYes" : "§cNo"));
                             plugin.getDataStore().saveCurrency(currency);
                         } else {
                             sender.sendMessage(Message.getUnknownCurrency());
@@ -239,7 +240,7 @@ public class CurrencyCommand implements CommandExecutor {
                             plugin.getAccountManager().getAccounts().stream().filter(account -> account.getBalances().containsKey(currency)).forEach(account -> account.getBalances().remove(currency));
                             plugin.getDataStore().deleteCurrency(currency);
                             plugin.getCurrencyManager().getCurrencies().remove(currency);
-                            sender.sendMessage(Message.getPrefix() + "§7Deleted currency: §a" + currency.getPlural());
+                            sender.sendMessage(Message.getPrefix() + "§7Deleted currency: §a" + currency.getIdentifier());
                         } else {
                             sender.sendMessage(Message.getUnknownCurrency());
                         }
@@ -263,7 +264,7 @@ public class CurrencyCommand implements CommandExecutor {
                             }
                             currency.setExchangeRate(amount);
                             plugin.getDataStore().saveCurrency(currency);
-                            sender.sendMessage(Message.getExchangeRateSet().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getPlural()).replace("{amount}", String.valueOf(amount)));
+                            sender.sendMessage(Message.getExchangeRateSet().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getIdentifier()).replace("{amount}", String.valueOf(amount)));
                         } else {
                             sender.sendMessage(Message.getUnknownCurrency());
                         }
@@ -311,7 +312,7 @@ public class CurrencyCommand implements CommandExecutor {
 
                             if (plugin.isDebug()) {
                                 for (Currency c : currencies) {
-                                    UtilServer.consoleLog("Currency: " + c.getSingular() + "(" + c.getPlural() + "): " + c.format(1000000));
+                                    UtilServer.consoleLog("Currency: " + c.getIdentifier() + "(" + c.getDisplayName() + "): " + c.format(1000000));
                                 }
                             }
 
@@ -344,7 +345,7 @@ public class CurrencyCommand implements CommandExecutor {
 
                             if (plugin.getDataStore().getName() != null) {
                                 for (Currency c : currencies) {
-                                    Currency newCurrency = new Currency(c.getUuid(), c.getSingular(), c.getPlural());
+                                    Currency newCurrency = new Currency(c.getUUID(), c.getIdentifier(), c.getDisplayName());
                                     newCurrency.setExchangeRate(c.getExchangeRate());
                                     newCurrency.setDefaultCurrency(c.isDefaultCurrency());
                                     newCurrency.setSymbol(c.getSymbol());

@@ -16,18 +16,18 @@ public class CurrencyManager {
 
     private final List<Currency> currencies = Lists.newArrayList();
 
-    public boolean currencyExist(String name) {
+    public boolean currencyExist(String identifier) {
         for(Currency currency : currencies) {
-            if(currency.getSingular().equalsIgnoreCase(name) || currency.getPlural().equalsIgnoreCase(name)){
+            if(currency.getIdentifier().equals(identifier)){
                 return true;
             }
         }
         return false;
     }
 
-    public Currency getCurrency(String name) {
+    public Currency getCurrency(String identifier) {
         for(Currency currency : currencies) {
-            if(currency.getSingular().equalsIgnoreCase(name) || currency.getPlural().equalsIgnoreCase(name)){
+            if(currency.getIdentifier().equals(identifier)){
                 return currency;
             }
         }
@@ -36,7 +36,7 @@ public class CurrencyManager {
 
     public Currency getCurrency(UUID uuid) {
         for (Currency currency : getCurrencies()) {
-            if (!currency.getUuid().equals(uuid)) continue;
+            if (!currency.getUUID().equals(uuid)) continue;
             return currency;
         }
         return null;
@@ -50,12 +50,12 @@ public class CurrencyManager {
         return null;
     }
 
-    public void createNewCurrency(String singular, String plural){
-        if(currencyExist(singular) || currencyExist(plural)) {
+    public void createNewCurrency(String identifier, String displayName){
+        if(currencyExist(identifier)) {
             return;
         }
 
-        Currency currency = new Currency(UUID.randomUUID(), singular, plural);
+        Currency currency = new Currency(UUID.randomUUID(), identifier, displayName);
         currency.setExchangeRate(1.0);
         if(currencies.size() == 0) {
             currency.setDefaultCurrency(true);

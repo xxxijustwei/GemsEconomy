@@ -17,8 +17,8 @@ import java.util.UUID;
 public class Currency {
 
     private UUID uuid;
-    private String singular;
-    private String plural;
+    private String identifier;
+    private String displayName;
     private String symbol = null;
     private ChatColor color = ChatColor.WHITE;
     private boolean decimalSupported = true;
@@ -27,34 +27,34 @@ public class Currency {
     private double defaultBalance = 0.0;
     private double exchangeRate = 0.0;
 
-    public Currency(UUID uuid, String singular, String plural) {
+    public Currency(UUID uuid, String identifier, String displayName) {
         this.uuid = uuid;
-        this.singular = singular;
-        this.plural = plural;
+        this.identifier = identifier;
+        this.displayName = displayName;
     }
 
-    public void setSingular(String singular) {
-        this.singular = singular;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
-    public void setPlural(String plural) {
-        this.plural = plural;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public void setDefaultBalance(double defaultBalance) {
         this.defaultBalance = defaultBalance;
     }
 
-    public UUID getUuid() {
+    public UUID getUUID() {
         return this.uuid;
     }
 
-    public String getSingular() {
-        return this.singular;
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public String getPlural() {
-        return this.plural;
+    public String getDisplayName() {
+        return displayName;
     }
 
     public double getDefaultBalance() {
@@ -70,18 +70,14 @@ public class Currency {
             amt.append(UtilString.format(amount));
         } else {
             String s = String.valueOf(amount);
-            String[] ss = s.split(".");
+            String[] ss = s.split("\\.");
             if (ss.length > 0) {
                 s = ss[0];
             }
             amt.append(NumberFormat.getInstance().format(Double.parseDouble(s)));
         }
         amt.append(" ");
-        if (amount != 1.0) {
-            amt.append(this.getPlural().replace("_", " "));
-        } else {
-            amt.append(this.getSingular().replace("_", " "));
-        }
+        amt.append(displayName);
         return amt.toString();
     }
 

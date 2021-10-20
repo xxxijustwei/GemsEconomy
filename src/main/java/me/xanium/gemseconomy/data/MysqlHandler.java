@@ -45,8 +45,8 @@ public class MysqlHandler extends DataStorage {
             ResultSet result = query.getResultSet();
             while (result.next()) {
                 UUID uuid = UUID.fromString(result.getString("uuid"));
-                String singular = result.getString("name_singular");
-                String plural = result.getString("name_plural");
+                String identifier = result.getString("identifier");
+                String displayName = result.getString("displayname");
                 double defaultBalance = result.getDouble("default_balance");
                 String symbol = result.getString("symbol");
                 boolean isDefault = result.getInt("is_default") == 1;
@@ -54,7 +54,7 @@ public class MysqlHandler extends DataStorage {
                 ChatColor color = ChatColor.valueOf(result.getString("color"));
                 double exchangeRate = result.getDouble("exchange_rate");
 
-                Currency currency = new Currency(uuid, singular, plural);
+                Currency currency = new Currency(uuid, identifier, displayName);
                 currency.setDefaultBalance(defaultBalance);
                 currency.setSymbol(symbol);
                 currency.setDecimalSupported(true);
@@ -64,7 +64,7 @@ public class MysqlHandler extends DataStorage {
                 currency.setExchangeRate(exchangeRate);
 
                 plugin.getCurrencyManager().add(currency);
-                UtilServer.consoleLog("Loaded currency: " + currency.getSingular() + " (" + currency.getPlural() + ")");
+                UtilServer.consoleLog("Loaded currency: " + currency.getIdentifier() + " (" + currency.getDisplayName() + ")");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,7 +73,7 @@ public class MysqlHandler extends DataStorage {
 
     @Override
     public void updateCurrencyLocally(Currency currency) {
-        try (DatabaseQuery query = dataManager.createQuery(EconomyTables.ECONOMY_CURRENCY.getTableName(), "uuid", currency.getUuid().toString())) {
+        try (DatabaseQuery query = dataManager.createQuery(EconomyTables.ECONOMY_CURRENCY.getTableName(), "uuid", currency.getUUID().toString())) {
             ResultSet result = query.getResultSet();
             if (result.next()) {
                 double defaultBalance = result.getDouble("default_balance");
@@ -101,8 +101,8 @@ public class MysqlHandler extends DataStorage {
                 EconomyTables.ECONOMY_CURRENCY.getTableName(),
                 new String[] {
                         "uuid",
-                        "name_singular",
-                        "name_plural",
+                        "identifier",
+                        "displayname",
                         "default_balance",
                         "symbol",
                         "is_default",
@@ -111,9 +111,9 @@ public class MysqlHandler extends DataStorage {
                         "exchange_rate"
                 },
                 new Object[] {
-                        currency.getUuid().toString(),
-                        currency.getSingular(),
-                        currency.getPlural(),
+                        currency.getUUID().toString(),
+                        currency.getIdentifier(),
+                        currency.getDisplayName(),
                         currency.getDefaultBalance(),
                         currency.getSymbol(),
                         currency.isDefaultCurrency() ? 1 : 0,
@@ -129,18 +129,18 @@ public class MysqlHandler extends DataStorage {
         dataManager.executeDelete(
                 EconomyTables.ECONOMY_CURRENCY.getTableName(),
                 "uuid",
-                currency.getUuid().toString()
+                currency.getUUID().toString()
         );
         dataManager.executeDelete(
                 EconomyTables.ECONOMY_ACCOUNT.getTableName(),
                 "currency",
-                currency.getUuid().toString()
+                currency.getUUID().toString()
         );
     }
 
     @Override
     public void getTopList(Currency currency, int offset, int amount, Callback<LinkedList<CachedTopListEntry>> callback) {
-        CachedTopList cache = topList.get(currency.getUuid());
+        CachedTopList cache = topList.get(currency.getUUID());
         if (cache != null && !cache.isExpired()) {
             LinkedList<CachedTopListEntry> result = new LinkedList<>();
             int collected = 0;
@@ -158,7 +158,7 @@ public class MysqlHandler extends DataStorage {
                     String.format(
                             "SELECT * FROM %s WHERE currency = '%s' ORDER BY balance DESC LIMIT %s, %s",
                             EconomyTables.ECONOMY_ACCOUNT.getTableName(),
-                            currency.getUuid().toString(),
+                            currency.getUUID().toString(),
                             offset,
                             offset + amount
                     )
@@ -245,7 +245,7 @@ public class MysqlHandler extends DataStorage {
     public void saveAccount(Account account) {
         List<Object[]> datum = new ArrayList<>();
         for (Currency currency : account.getBalances().keySet()) {
-            UUID cid = currency.getUuid();
+            UUID cid = currency.getUUID();
             double balance = account.getBalance(currency);
             datum.add(new Object[] {
                     account.getUuid().toString(),
@@ -281,7 +281,7 @@ public class MysqlHandler extends DataStorage {
         Object[][] datum = new Object[account.getBalances().size()][];
         int i = 0;
         for (Currency currency : account.getBalances().keySet()) {
-            UUID cid = currency.getUuid();
+            UUID cid = currency.getUUID();
             double balance = account.getBalance(currency);
             datum[i] = new Object[] {
                     account.getUuid().toString(),

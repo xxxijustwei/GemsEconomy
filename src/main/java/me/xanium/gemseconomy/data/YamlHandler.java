@@ -66,9 +66,9 @@ public class YamlHandler extends DataStorage {
             Set<String> currencies = section.getKeys(false);
             for (String uuid : currencies) {
                 String path = "currencies." + uuid;
-                String single = getConfig().getString(path + ".singular");
-                String plural = getConfig().getString(path + ".plural");
-                Currency currency = new Currency(UUID.fromString(uuid), single, plural);
+                String identifier = getConfig().getString(path + ".identifier");
+                String displayName = getConfig().getString(path + ".displayname");
+                Currency currency = new Currency(UUID.fromString(uuid), identifier, displayName);
                 currency.setColor(ChatColor.valueOf(getConfig().getString(path + ".color").toUpperCase()));
                 currency.setDecimalSupported(getConfig().getBoolean(path + ".decimalsupported"));
                 currency.setDefaultBalance(getConfig().getDouble(path + ".defaultbalance"));
@@ -77,16 +77,16 @@ public class YamlHandler extends DataStorage {
                 currency.setSymbol(getConfig().getString(path + ".symbol"));
                 currency.setExchangeRate(getConfig().getDouble(path + ".exchange_rate"));
                 plugin.getCurrencyManager().add(currency);
-                UtilServer.consoleLog("Loaded currency: " + currency.getSingular());
+                UtilServer.consoleLog("Loaded currency: " + currency.getIdentifier());
             }
         }
     }
 
     @Override
     public void saveCurrency(Currency currency) {
-        String path = "currencies." + currency.getUuid().toString();
-        getConfig().set(path + ".singular", currency.getSingular());
-        getConfig().set(path + ".plural", currency.getPlural());
+        String path = "currencies." + currency.getUUID().toString();
+        getConfig().set(path + ".identifier", currency.getIdentifier());
+        getConfig().set(path + ".displayname", currency.getDisplayName());
         getConfig().set(path + ".defaultbalance", currency.getDefaultBalance());
         getConfig().set(path + ".symbol", currency.getSymbol());
         getConfig().set(path + ".decimalsupported", currency.isDecimalSupported());
@@ -103,7 +103,7 @@ public class YamlHandler extends DataStorage {
 
     @Override
     public void deleteCurrency(Currency currency) {
-        String path = "currencies." + currency.getUuid().toString();
+        String path = "currencies." + currency.getUUID().toString();
         getConfig().set(path, null);
         try {
             getConfig().save(getFile());
@@ -215,7 +215,7 @@ public class YamlHandler extends DataStorage {
         getConfig().set(path + ".uuid", account.getUuid().toString());
         for (Currency currency : account.getBalances().keySet()) {
             double balance = account.getBalance(currency);
-            getConfig().set(path + ".balances." + currency.getUuid().toString(), balance);
+            getConfig().set(path + ".balances." + currency.getUUID().toString(), balance);
         }
         getConfig().set(path + ".payable", account.canReceiveCurrency());
         try {

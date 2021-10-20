@@ -108,12 +108,12 @@ public class GemsEconomyAPI {
 
     /**
      *
-     * @param name - Currency singular or plural.
+     * @param identifier - Currency identifier.
      * @return - Currency Object.
      */
-    public Currency getCurrency(String name){
-        if(plugin.getCurrencyManager().getCurrency(name) != null){
-            return plugin.getCurrencyManager().getCurrency(name);
+    public Currency getCurrency(String identifier){
+        if(plugin.getCurrencyManager().getCurrency(identifier) != null){
+            return plugin.getCurrencyManager().getCurrency(identifier);
         }
         return null;
     }

@@ -62,7 +62,7 @@ public class ExchangeCommand implements CommandExecutor {
                                     .replace("{currencycolor}", "" + toExchange.getColor())
                                     .replace("{ex_curr}", toExchange.format(amount))
                                     .replace("{currencycolor2}", "" + toReceive.getColor())
-                                    .replace("{re_curr}", toReceive.getPlural()));
+                                    .replace("{re_curr}", toReceive.getIdentifier()));
                         }
                     }
                 } else {

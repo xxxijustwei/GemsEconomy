@@ -42,8 +42,8 @@ public class GEVaultHook extends AbstractEconomy {
     public String currencyNamePlural() {
         Currency currency = GemsEconomy.getInstance().getCurrencyManager().getDefaultCurrency();
         if(currency == null) return "";
-        if(currency.getPlural() != null) {
-            return currency.getPlural();
+        if(currency.getIdentifier() != null) {
+            return currency.getIdentifier();
         }else{
             return "";
         }
@@ -53,8 +53,8 @@ public class GEVaultHook extends AbstractEconomy {
     public String currencyNameSingular() {
         Currency currency = GemsEconomy.getInstance().getCurrencyManager().getDefaultCurrency();
         if(currency == null) return "";
-        if(currency.getSingular() != null) {
-            return currency.getSingular();
+        if(currency.getIdentifier() != null) {
+            return currency.getIdentifier();
         }else{
             return "";
         }
