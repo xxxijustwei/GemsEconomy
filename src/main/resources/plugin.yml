@@ -1,14 +1,15 @@
 name: GemsEconomy
 main: me.xanium.gemseconomy.GemsEconomy
-version: 4.9.2
+version: ${project.version}
 author: Xanium
 description: A multi-currency economy plugin for spigot servers!
 website: https://www.spigotmc.org/resources/gemseconomy.19655/
 load: STARTUP
-api-version: 1.15
 loadbefore:
   - ItemFrameShops
-softdepend: [Vault, NBTAPI]
+softdepend:
+  - Vault
+  - DataManager
 commands:
   balance:
     description: Shows your balances
@@ -30,10 +31,6 @@ commands:
     description: Pays another account
     usage: /pay <account> <amount> (currency)
     aliases: [gpay, gemspay]
-  cheque:
-    usage: /cheque
-    description: Write or Redeem a cheque.
-    aliases: [note, banknote]
   exchange:
     usage: /exchange
     description: Exchange currencies.

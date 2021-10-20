@@ -23,7 +23,7 @@ import java.util.UUID;
 
 public class Account {
 
-    private final UUID uuid;
+    private UUID uuid;
     private String nickname;
     private Map<Currency, Double> balances;
     private boolean canReceiveCurrency = true;
@@ -31,7 +31,14 @@ public class Account {
     public Account(UUID uuid, String nickname) {
         this.uuid = uuid;
         this.nickname = nickname;
-        this.balances = new HashMap<>();
+        this.initBalance();
+    }
+
+    public void initBalance() {
+        balances = new HashMap<>();
+        for (Currency currency : GemsEconomy.getInstance().getCurrencyManager().getCurrencies()) {
+            balances.put(currency, currency.getDefaultBalance());
+        }
     }
 
     public boolean withdraw(Currency currency, double amount) {

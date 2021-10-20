@@ -24,7 +24,7 @@ import me.xanium.gemseconomy.GemsEconomy;
 import me.xanium.gemseconomy.account.Account;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.data.DataStorage;
-import me.xanium.gemseconomy.file.F;
+import me.xanium.gemseconomy.file.Message;
 import me.xanium.gemseconomy.utils.SchedulerUtils;
 import me.xanium.gemseconomy.utils.UtilServer;
 import me.xanium.gemseconomy.utils.UtilString;
@@ -46,11 +46,11 @@ public class CurrencyCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String s124, String[] args) {
         SchedulerUtils.runAsync(() -> {
             if (!sender.hasPermission("gemseconomy.command.currency")) {
-                sender.sendMessage(F.getNoPerms());
+                sender.sendMessage(Message.getNoPerms());
                 return;
             }
             if (args.length == 0) {
-                F.sendCurrencyUsage(sender);
+                Message.sendCurrencyUsage(sender);
             } else {
                 String cmd = args[0];
                 if (cmd.equalsIgnoreCase("create")) {
@@ -58,17 +58,17 @@ public class CurrencyCommand implements CommandExecutor {
                         String single = args[1];
                         String plural = args[2];
                         if (plugin.getCurrencyManager().currencyExist(single) || plugin.getCurrencyManager().currencyExist(plural)) {
-                            sender.sendMessage(F.getPrefix() + "§cCurrency already exists.");
+                            sender.sendMessage(Message.getPrefix() + "§cCurrency already exists.");
                             return;
                         }
 
                         plugin.getCurrencyManager().createNewCurrency(single, plural);
-                        sender.sendMessage(F.getPrefix() + "§7Created currency: §a" + single);
+                        sender.sendMessage(Message.getPrefix() + "§7Created currency: §a" + single);
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Create());
+                        sender.sendMessage(Message.getCurrencyUsage_Create());
                     }
                 } else if (cmd.equalsIgnoreCase("list")) {
-                    sender.sendMessage(F.getPrefix() + "§7There are §f" + plugin.getCurrencyManager().getCurrencies().size() + "§7 currencies.");
+                    sender.sendMessage(Message.getPrefix() + "§7There are §f" + plugin.getCurrencyManager().getCurrencies().size() + "§7 currencies.");
                     for (Currency currency : plugin.getCurrencyManager().getCurrencies()) {
                         sender.sendMessage("§a§l>> §e" + currency.getSingular());
                     }
@@ -76,19 +76,19 @@ public class CurrencyCommand implements CommandExecutor {
                     if (args.length == 2) {
                         Currency currency = plugin.getCurrencyManager().getCurrency(args[1]);
                         if (currency != null) {
-                            sender.sendMessage(F.getPrefix() + "§7ID: §c" + currency.getUuid().toString());
-                            sender.sendMessage(F.getPrefix() + "§7Singular: §a" + currency.getSingular() + "§7, Plural: §a" + currency.getPlural());
-                            sender.sendMessage(F.getPrefix() + "§7Start Balance: " + currency.getColor() + currency.format(currency.getDefaultBalance()) + "§7.");
-                            sender.sendMessage(F.getPrefix() + "§7Decimals: " + (currency.isDecimalSupported() ? "§aYes" : "§cNo"));
-                            sender.sendMessage(F.getPrefix() + "§7Default: " + (currency.isDefaultCurrency() ? "§aYes" : "§cNo"));
-                            sender.sendMessage(F.getPrefix() + "§7Payable: " + (currency.isPayable() ? "§aYes" : "§cNo"));
-                            sender.sendMessage(F.getPrefix() + "§7Color: " + currency.getColor() + currency.getColor().name());
-                            sender.sendMessage(F.getPrefix() + "§7Rate: " + currency.getColor() + currency.getExchangeRate());
+                            sender.sendMessage(Message.getPrefix() + "§7ID: §c" + currency.getUuid().toString());
+                            sender.sendMessage(Message.getPrefix() + "§7Singular: §a" + currency.getSingular() + "§7, Plural: §a" + currency.getPlural());
+                            sender.sendMessage(Message.getPrefix() + "§7Start Balance: " + currency.getColor() + currency.format(currency.getDefaultBalance()) + "§7.");
+                            sender.sendMessage(Message.getPrefix() + "§7Decimals: " + (currency.isDecimalSupported() ? "§aYes" : "§cNo"));
+                            sender.sendMessage(Message.getPrefix() + "§7Default: " + (currency.isDefaultCurrency() ? "§aYes" : "§cNo"));
+                            sender.sendMessage(Message.getPrefix() + "§7Payable: " + (currency.isPayable() ? "§aYes" : "§cNo"));
+                            sender.sendMessage(Message.getPrefix() + "§7Color: " + currency.getColor() + currency.getColor().name());
+                            sender.sendMessage(Message.getPrefix() + "§7Rate: " + currency.getColor() + currency.getExchangeRate());
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_View());
+                        sender.sendMessage(Message.getCurrencyUsage_View());
                     }
                 } else if (cmd.equalsIgnoreCase("startbal")) {
                     if (args.length == 3) {
@@ -105,7 +105,7 @@ public class CurrencyCommand implements CommandExecutor {
                                         }
                                         break block76;
                                     } catch (NumberFormatException ex) {
-                                        sender.sendMessage(F.getUnvalidAmount());
+                                        sender.sendMessage(Message.getUnvalidAmount());
                                         return;
                                     }
                                 }
@@ -115,18 +115,18 @@ public class CurrencyCommand implements CommandExecutor {
                                         throw new NumberFormatException();
                                     }
                                 } catch (NumberFormatException ex) {
-                                    sender.sendMessage(F.getUnvalidAmount());
+                                    sender.sendMessage(Message.getUnvalidAmount());
                                     return;
                                 }
                             }
                             currency.setDefaultBalance(amount);
-                            sender.sendMessage(F.getPrefix() + "§7Starting balance for §f" + currency.getPlural() + " §7set: §a" + UtilString.format(currency.getDefaultBalance()));
+                            sender.sendMessage(Message.getPrefix() + "§7Starting balance for §f" + currency.getPlural() + " §7set: §a" + UtilString.format(currency.getDefaultBalance()));
                             plugin.getDataStore().saveCurrency(currency);
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Startbal());
+                        sender.sendMessage(Message.getCurrencyUsage_Startbal());
                     }
                 } else if (cmd.equalsIgnoreCase("color")) {
                     if (args.length == 3) {
@@ -138,16 +138,16 @@ public class CurrencyCommand implements CommandExecutor {
                                     throw new Exception();
                                 }
                                 currency.setColor(color);
-                                sender.sendMessage(F.getPrefix() + "§7Color for §f" + currency.getPlural() + " §7updated: " + color + color.name());
+                                sender.sendMessage(Message.getPrefix() + "§7Color for §f" + currency.getPlural() + " §7updated: " + color + color.name());
                                 plugin.getDataStore().saveCurrency(currency);
                             } catch (Exception ex) {
-                                sender.sendMessage(F.getPrefix() + "§cInvalid chat color.");
+                                sender.sendMessage(Message.getPrefix() + "§cInvalid chat color.");
                             }
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Color());
+                        sender.sendMessage(Message.getCurrencyUsage_Color());
                     }
                 } else if (cmd.equalsIgnoreCase("colorlist")) {
                     sender.sendMessage("§0§lBLACK §7= black");
@@ -173,20 +173,20 @@ public class CurrencyCommand implements CommandExecutor {
                             String symbol = args[2];
                             if (symbol.equalsIgnoreCase("remove")) {
                                 currency.setSymbol(null);
-                                sender.sendMessage(F.getPrefix() + "§7Currency symbol removed for §f" + currency.getPlural());
+                                sender.sendMessage(Message.getPrefix() + "§7Currency symbol removed for §f" + currency.getPlural());
                                 plugin.getDataStore().saveCurrency(currency);
                             } else if (symbol.length() == 1) {
                                 currency.setSymbol(symbol);
-                                sender.sendMessage(F.getPrefix() + "§7Currency symbol for §f" + currency.getPlural() + " §7updated: §a" + symbol);
+                                sender.sendMessage(Message.getPrefix() + "§7Currency symbol for §f" + currency.getPlural() + " §7updated: §a" + symbol);
                                 plugin.getDataStore().saveCurrency(currency);
                             } else {
-                                sender.sendMessage(F.getPrefix() + "§7Symbol must be 1 character, or remove it with \"remove\".");
+                                sender.sendMessage(Message.getPrefix() + "§7Symbol must be 1 character, or remove it with \"remove\".");
                             }
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Symbol());
+                        sender.sendMessage(Message.getCurrencyUsage_Symbol());
                     }
                 } else if (cmd.equalsIgnoreCase("default")) {
                     if (args.length == 2) {
@@ -198,39 +198,39 @@ public class CurrencyCommand implements CommandExecutor {
                                 plugin.getDataStore().saveCurrency(c);
                             }
                             currency.setDefaultCurrency(true);
-                            sender.sendMessage(F.getPrefix() + "§7Set default currency to §f" + currency.getPlural());
+                            sender.sendMessage(Message.getPrefix() + "§7Set default currency to §f" + currency.getPlural());
                             plugin.getDataStore().saveCurrency(currency);
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Default());
+                        sender.sendMessage(Message.getCurrencyUsage_Default());
                     }
                 } else if (cmd.equalsIgnoreCase("payable")) {
                     if (args.length == 2) {
                         Currency currency = plugin.getCurrencyManager().getCurrency(args[1]);
                         if (currency != null) {
                             currency.setPayable(!currency.isPayable());
-                            sender.sendMessage(F.getPrefix() + "§7Toggled payability for §f" + currency.getPlural() + "§7: " + (currency.isPayable() ? "§aYes" : "§cNo"));
+                            sender.sendMessage(Message.getPrefix() + "§7Toggled payability for §f" + currency.getPlural() + "§7: " + (currency.isPayable() ? "§aYes" : "§cNo"));
                             plugin.getDataStore().saveCurrency(currency);
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Payable());
+                        sender.sendMessage(Message.getCurrencyUsage_Payable());
                     }
                 } else if (cmd.equalsIgnoreCase("decimals")) {
                     if (args.length == 2) {
                         Currency currency = plugin.getCurrencyManager().getCurrency(args[1]);
                         if (currency != null) {
                             currency.setDecimalSupported(!currency.isDecimalSupported());
-                            sender.sendMessage(F.getPrefix() + "§7Toggled Decimal Support for §f" + currency.getPlural() + "§7: " + (currency.isDecimalSupported() ? "§aYes" : "§cNo"));
+                            sender.sendMessage(Message.getPrefix() + "§7Toggled Decimal Support for §f" + currency.getPlural() + "§7: " + (currency.isDecimalSupported() ? "§aYes" : "§cNo"));
                             plugin.getDataStore().saveCurrency(currency);
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Decimals());
+                        sender.sendMessage(Message.getCurrencyUsage_Decimals());
                     }
                 } else if (cmd.equalsIgnoreCase("delete")) {
                     if (args.length == 2) {
@@ -239,12 +239,12 @@ public class CurrencyCommand implements CommandExecutor {
                             plugin.getAccountManager().getAccounts().stream().filter(account -> account.getBalances().containsKey(currency)).forEach(account -> account.getBalances().remove(currency));
                             plugin.getDataStore().deleteCurrency(currency);
                             plugin.getCurrencyManager().getCurrencies().remove(currency);
-                            sender.sendMessage(F.getPrefix() + "§7Deleted currency: §a" + currency.getPlural());
+                            sender.sendMessage(Message.getPrefix() + "§7Deleted currency: §a" + currency.getPlural());
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Delete());
+                        sender.sendMessage(Message.getCurrencyUsage_Delete());
                     }
                 } else if (cmd.equalsIgnoreCase("setrate")) {
                     if (args.length == 3) {
@@ -258,17 +258,17 @@ public class CurrencyCommand implements CommandExecutor {
                                     throw new NumberFormatException();
                                 }
                             } catch (NumberFormatException ex) {
-                                sender.sendMessage(F.getUnvalidAmount());
+                                sender.sendMessage(Message.getUnvalidAmount());
                                 return;
                             }
                             currency.setExchangeRate(amount);
                             plugin.getDataStore().saveCurrency(currency);
-                            sender.sendMessage(F.getExchangeRateSet().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getPlural()).replace("{amount}", String.valueOf(amount)));
+                            sender.sendMessage(Message.getExchangeRateSet().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getPlural()).replace("{amount}", String.valueOf(amount)));
                         } else {
-                            sender.sendMessage(F.getUnknownCurrency());
+                            sender.sendMessage(Message.getUnknownCurrency());
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Rate());
+                        sender.sendMessage(Message.getCurrencyUsage_Rate());
                     }
                 } else if (cmd.equalsIgnoreCase("convert")) {
                     if (args.length == 2) {
@@ -277,23 +277,23 @@ public class CurrencyCommand implements CommandExecutor {
                         DataStorage ds = DataStorage.getMethod(method);
 
                         if (current == null) {
-                            sender.sendMessage(F.getPrefix() + "§7Current Data Store is null. Did something go wrong on startup?");
+                            sender.sendMessage(Message.getPrefix() + "§7Current Data Store is null. Did something go wrong on startup?");
                             return;
                         }
 
                         if (ds != null) {
                             if (current.getName().equalsIgnoreCase(ds.getName())) {
-                                sender.sendMessage(F.getPrefix() + "§7You can't convert to the same datastore.");
+                                sender.sendMessage(Message.getPrefix() + "§7You can't convert to the same datastore.");
                                 return;
                             }
 
                             plugin.getConfig().set("storage", ds.getName());
                             plugin.saveConfig();
 
-                            sender.sendMessage(F.getPrefix() + "§aLoading data..");
+                            sender.sendMessage(Message.getPrefix() + "§aLoading data..");
                             plugin.getAccountManager().getAccounts().clear();
 
-                            sender.sendMessage(F.getPrefix() + "§aStored accounts.");
+                            sender.sendMessage(Message.getPrefix() + "§aStored accounts.");
                             ArrayList<Account> offline = new ArrayList<>(plugin.getDataStore().getOfflineAccounts());
                             UtilServer.consoleLog("Stored Accounts: " + offline.size());
                             if (GemsEconomy.getInstance().isDebug()) {
@@ -306,7 +306,7 @@ public class CurrencyCommand implements CommandExecutor {
                             }
 
                             ArrayList<Currency> currencies = new ArrayList<>(plugin.getCurrencyManager().getCurrencies());
-                            sender.sendMessage(F.getPrefix() + "§aStored currencies.");
+                            sender.sendMessage(Message.getPrefix() + "§aStored currencies.");
                             plugin.getCurrencyManager().getCurrencies().clear();
 
                             if (plugin.isDebug()) {
@@ -315,7 +315,7 @@ public class CurrencyCommand implements CommandExecutor {
                                 }
                             }
 
-                            sender.sendMessage(F.getPrefix() + "§aSwitching from §f" + current.getName() + " §ato §f" + ds.getName() + "§a.");
+                            sender.sendMessage(Message.getPrefix() + "§aSwitching from §f" + current.getName() + " §ato §f" + ds.getName() + "§a.");
 
                             if (ds.getName().equalsIgnoreCase("yaml")) {
                                 SchedulerUtils.run(() -> {
@@ -329,7 +329,7 @@ public class CurrencyCommand implements CommandExecutor {
                             if (plugin.getDataStore() != null) {
                                 plugin.getDataStore().close();
 
-                                sender.sendMessage(F.getPrefix() + "§aDataStore is closed. Plugin is essentially dead now.");
+                                sender.sendMessage(Message.getPrefix() + "§aDataStore is closed. Plugin is essentially dead now.");
                             }
 
                             plugin.initializeDataStore(ds.getName(), false);
@@ -339,8 +339,8 @@ public class CurrencyCommand implements CommandExecutor {
                                 ex.printStackTrace();
                             }
 
-                            sender.sendMessage(F.getPrefix() + "§aInitialized " + ds.getName() + " Data Store. Check console for wrong username/password if using mysql.");
-                            sender.sendMessage(F.getPrefix() + "§aIf there are sql login errors, you can just retry after you have fixed the credentials, changed the datastore back to what you were using and restarted the server!");
+                            sender.sendMessage(Message.getPrefix() + "§aInitialized " + ds.getName() + " Data Store. Check console for wrong username/password if using mysql.");
+                            sender.sendMessage(Message.getPrefix() + "§aIf there are sql login errors, you can just retry after you have fixed the credentials, changed the datastore back to what you were using and restarted the server!");
 
                             if (plugin.getDataStore().getName() != null) {
                                 for (Currency c : currencies) {
@@ -354,9 +354,9 @@ public class CurrencyCommand implements CommandExecutor {
                                     newCurrency.setDefaultBalance(c.getDefaultBalance());
                                     plugin.getDataStore().saveCurrency(newCurrency);
                                 }
-                                sender.sendMessage(F.getPrefix() + "§aSaved currencies to storage.");
+                                sender.sendMessage(Message.getPrefix() + "§aSaved currencies to storage.");
                                 plugin.getDataStore().loadCurrencies();
-                                sender.sendMessage(F.getPrefix() + "§aLoaded all currencies as usual.");
+                                sender.sendMessage(Message.getPrefix() + "§aLoaded all currencies as usual.");
 
                                 try {
                                     Thread.sleep(2000);
@@ -367,7 +367,7 @@ public class CurrencyCommand implements CommandExecutor {
                                 for (Account a : offline) {
                                     plugin.getDataStore().saveAccount(a);
                                 }
-                                sender.sendMessage(F.getPrefix() + "§aAll accounts saved to storage.");
+                                sender.sendMessage(Message.getPrefix() + "§aAll accounts saved to storage.");
 
                                 try {
                                     Thread.sleep(2000);
@@ -378,14 +378,14 @@ public class CurrencyCommand implements CommandExecutor {
                                 for (Player players : Bukkit.getOnlinePlayers()) {
                                     plugin.getDataStore().loadAccount(players.getUniqueId(), account -> plugin.getAccountManager().add(account));
                                 }
-                                sender.sendMessage(F.getPrefix() + "§aLoaded all accounts for online players.");
-                                sender.sendMessage(F.getPrefix() + "§aData storage conversion is done.");
+                                sender.sendMessage(Message.getPrefix() + "§aLoaded all accounts for online players.");
+                                sender.sendMessage(Message.getPrefix() + "§aData storage conversion is done.");
                             }
                         } else {
-                            sender.sendMessage(F.getPrefix() + "§cData Storing method not found.");
+                            sender.sendMessage(Message.getPrefix() + "§cData Storing method not found.");
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Convert());
+                        sender.sendMessage(Message.getCurrencyUsage_Convert());
                     }
                 } else if (cmd.equalsIgnoreCase("backend")) {
                     if (args.length == 2) {
@@ -394,13 +394,13 @@ public class CurrencyCommand implements CommandExecutor {
                         DataStorage ds = DataStorage.getMethod(method);
 
                         if (current == null) {
-                            sender.sendMessage(F.getPrefix() + "§7Current Data Store is null. Did something go wrong on startup?");
+                            sender.sendMessage(Message.getPrefix() + "§7Current Data Store is null. Did something go wrong on startup?");
                             return;
                         }
 
                         if (ds != null) {
                             if (current.getName().equalsIgnoreCase(ds.getName())) {
-                                sender.sendMessage(F.getPrefix() + "§7You can't convert to the same datastore.");
+                                sender.sendMessage(Message.getPrefix() + "§7You can't convert to the same datastore.");
                                 return;
                             }
 
@@ -408,7 +408,7 @@ public class CurrencyCommand implements CommandExecutor {
                             plugin.getConfig().set("storage", ds.getName());
                             plugin.saveConfig();
 
-                            sender.sendMessage(F.getPrefix() + "§aSaving data and closing up...");
+                            sender.sendMessage(Message.getPrefix() + "§aSaving data and closing up...");
 
                             if (plugin.getDataStore() != null) {
                                 plugin.getDataStore().close();
@@ -416,10 +416,10 @@ public class CurrencyCommand implements CommandExecutor {
                                 plugin.getAccountManager().getAccounts().clear();
                                 plugin.getCurrencyManager().getCurrencies().clear();
 
-                                sender.sendMessage(F.getPrefix() + "§aSuccessfully shutdown. Booting..");
+                                sender.sendMessage(Message.getPrefix() + "§aSuccessfully shutdown. Booting..");
                             }
 
-                            sender.sendMessage(F.getPrefix() + "§aSwitching from §f" + current.getName() + " §ato §f" + ds.getName() + "§a.");
+                            sender.sendMessage(Message.getPrefix() + "§aSwitching from §f" + current.getName() + " §ato §f" + ds.getName() + "§a.");
 
                             plugin.initializeDataStore(ds.getName(), true);
                             try {
@@ -431,13 +431,13 @@ public class CurrencyCommand implements CommandExecutor {
                             for (Player players : Bukkit.getOnlinePlayers()) {
                                 plugin.getDataStore().loadAccount(players.getUniqueId(), account -> plugin.getAccountManager().add(account));
                             }
-                            sender.sendMessage(F.getPrefix() + "§aLoaded all accounts for online players.");
+                            sender.sendMessage(Message.getPrefix() + "§aLoaded all accounts for online players.");
                         }
                     } else {
-                        sender.sendMessage(F.getCurrencyUsage_Backend());
+                        sender.sendMessage(Message.getCurrencyUsage_Backend());
                     }
                 } else {
-                    sender.sendMessage(F.getUnknownSubCommand());
+                    sender.sendMessage(Message.getUnknownSubCommand());
                 }
             }
 

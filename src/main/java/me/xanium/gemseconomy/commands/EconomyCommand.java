@@ -11,7 +11,7 @@ package me.xanium.gemseconomy.commands;
 import me.xanium.gemseconomy.GemsEconomy;
 import me.xanium.gemseconomy.account.Account;
 import me.xanium.gemseconomy.currency.Currency;
-import me.xanium.gemseconomy.file.F;
+import me.xanium.gemseconomy.file.Message;
 import me.xanium.gemseconomy.utils.UtilServer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,30 +24,30 @@ public class EconomyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s124, String[] args) {
         if (!sender.hasPermission("gemseconomy.command.economy")) {
-            sender.sendMessage(F.getNoPerms());
+            sender.sendMessage(Message.getNoPerms());
             return true;
         }
 
         if (args.length == 0) {
-            F.getManageHelp(sender);
+            Message.getManageHelp(sender);
             return true;
         }
 
         if (args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("add")) {
             if (!sender.hasPermission("gemseconomy.command.give")) {
-                sender.sendMessage(F.getNoPerms());
+                sender.sendMessage(Message.getNoPerms());
                 return true;
             }
             changeBalance(sender, args, false);
         } else if (args[0].equalsIgnoreCase("take") || args[0].equalsIgnoreCase("remove")) {
             if (!sender.hasPermission("gemseconomy.command.take")) {
-                sender.sendMessage(F.getNoPerms());
+                sender.sendMessage(Message.getNoPerms());
                 return true;
             }
             changeBalance(sender, args, true);
         } else if (args[0].equalsIgnoreCase("set")) {
             if (!sender.hasPermission("gemseconomy.command.set")) {
-                sender.sendMessage(F.getNoPerms());
+                sender.sendMessage(Message.getNoPerms());
                 return true;
             }
             set(sender, args);
@@ -56,7 +56,7 @@ public class EconomyCommand implements CommandExecutor {
                 UtilServer.consoleLog("Account: " + a.getNickname() + " cached");
             }
         } else {
-            sender.sendMessage(F.getUnknownSubCommand());
+            sender.sendMessage(Message.getUnknownSubCommand());
         }
         return true;
     }
@@ -65,7 +65,7 @@ public class EconomyCommand implements CommandExecutor {
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             if (!withdraw) {
                 if (args.length < 3) {
-                    sender.sendMessage(F.getGiveUsage());
+                    sender.sendMessage(Message.getGiveUsage());
                     return;
                 }
                 Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
@@ -81,7 +81,7 @@ public class EconomyCommand implements CommandExecutor {
                                 throw new NumberFormatException();
                             }
                         } catch (NumberFormatException ex) {
-                            sender.sendMessage(F.getUnvalidAmount());
+                            sender.sendMessage(Message.getUnvalidAmount());
                             return;
                         }
                     } else {
@@ -91,7 +91,7 @@ public class EconomyCommand implements CommandExecutor {
                                 throw new NumberFormatException();
                             }
                         } catch (NumberFormatException ex) {
-                            sender.sendMessage(F.getUnvalidAmount());
+                            sender.sendMessage(Message.getUnvalidAmount());
                             return;
                         }
                     }
@@ -99,20 +99,20 @@ public class EconomyCommand implements CommandExecutor {
                     Account target = plugin.getAccountManager().getAccount(args[1]);
                     if (target != null) {
                         if (target.deposit(currency, amount)) {
-                            sender.sendMessage(F.getAddMessage()
+                            sender.sendMessage(Message.getAddMessage()
                                     .replace("{player}", target.getNickname())
                                     .replace("{currencycolor}", currency.getColor() + "")
                                     .replace("{amount}", currency.format(amount)));
                         }
                     } else {
-                        sender.sendMessage(F.getPlayerDoesNotExist());
+                        sender.sendMessage(Message.getPlayerDoesNotExist());
                     }
                 } else {
-                    sender.sendMessage(F.getUnknownCurrency());
+                    sender.sendMessage(Message.getUnknownCurrency());
                 }
             } else {
                 if (args.length < 3) {
-                    sender.sendMessage(F.getTakeUsage());
+                    sender.sendMessage(Message.getTakeUsage());
                     return;
                 }
                 Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
@@ -129,7 +129,7 @@ public class EconomyCommand implements CommandExecutor {
                                 throw new NumberFormatException();
                             }
                         } catch (NumberFormatException ex) {
-                            sender.sendMessage(F.getUnvalidAmount());
+                            sender.sendMessage(Message.getUnvalidAmount());
                             return;
                         }
                     } else {
@@ -139,28 +139,28 @@ public class EconomyCommand implements CommandExecutor {
                                 throw new NumberFormatException();
                             }
                         } catch (NumberFormatException ex) {
-                            sender.sendMessage(F.getUnvalidAmount());
+                            sender.sendMessage(Message.getUnvalidAmount());
                             return;
                         }
                     }
                     Account target = plugin.getAccountManager().getAccount(args[1]);
                     if (target != null) {
                         if (target.withdraw(currency, amount)) {
-                            sender.sendMessage(F.getTakeMessage()
+                            sender.sendMessage(Message.getTakeMessage()
                                     .replace("{player}", target.getNickname())
                                     .replace("{currencycolor}", currency.getColor() + "")
                                     .replace("{amount}", currency.format(amount)));
                         } else {
-                            sender.sendMessage(F.getTargetInsufficientFunds()
+                            sender.sendMessage(Message.getTargetInsufficientFunds()
                                     .replace("{currencycolor}", currency.getColor() + "")
                                     .replace("{currency}", currency.getPlural())
                                     .replace("{target}", target.getDisplayName()));
                         }
                     } else {
-                        sender.sendMessage(F.getPlayerDoesNotExist());
+                        sender.sendMessage(Message.getPlayerDoesNotExist());
                     }
                 } else {
-                    sender.sendMessage(F.getUnknownCurrency());
+                    sender.sendMessage(Message.getUnknownCurrency());
                 }
             }
         });
@@ -169,7 +169,7 @@ public class EconomyCommand implements CommandExecutor {
     private void set(CommandSender sender, String[] args){
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             if (args.length < 3) {
-                sender.sendMessage(F.getSetUsage());
+                sender.sendMessage(Message.getSetUsage());
                 return;
             }
             Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
@@ -182,29 +182,29 @@ public class EconomyCommand implements CommandExecutor {
                     try {
                         amount = Double.parseDouble(args[2]);
                     } catch (NumberFormatException ex) {
-                        sender.sendMessage(F.getUnvalidAmount());
+                        sender.sendMessage(Message.getUnvalidAmount());
                         return;
                     }
                 } else {
                     try {
                         amount = Integer.parseInt(args[2]);
                     } catch (NumberFormatException ex) {
-                        sender.sendMessage(F.getUnvalidAmount());
+                        sender.sendMessage(Message.getUnvalidAmount());
                         return;
                     }
                 }
                 Account target = plugin.getAccountManager().getAccount(args[1]);
                 if (target != null) {
                     target.setBalance(currency, amount);
-                    sender.sendMessage(F.getSetMessage()
+                    sender.sendMessage(Message.getSetMessage()
                             .replace("{player}", target.getNickname())
                             .replace("{currencycolor}", currency.getColor() + "")
                             .replace("{amount}", currency.format(amount)));
                 } else {
-                    sender.sendMessage(F.getPlayerDoesNotExist());
+                    sender.sendMessage(Message.getPlayerDoesNotExist());
                 }
             } else {
-                sender.sendMessage(F.getUnknownCurrency());
+                sender.sendMessage(Message.getUnknownCurrency());
             }
         });
     }

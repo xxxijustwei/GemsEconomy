@@ -9,7 +9,7 @@
 package me.xanium.gemseconomy.utils;
 
 import com.google.common.collect.Lists;
-import me.xanium.gemseconomy.file.F;
+import me.xanium.gemseconomy.file.Message;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -28,7 +28,7 @@ public class UtilString {
             }
 
         } catch (NumberFormatException ex) {
-            sender.sendMessage(F.getPrefix() + F.getUnvalidAmount());
+            sender.sendMessage(Message.getPrefix() + Message.getUnvalidAmount());
             return false;
         }
         return true;

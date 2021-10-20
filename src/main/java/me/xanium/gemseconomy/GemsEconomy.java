@@ -10,12 +10,11 @@ package me.xanium.gemseconomy;
 
 import me.xanium.gemseconomy.account.AccountManager;
 import me.xanium.gemseconomy.bungee.UpdateForwarder;
-import me.xanium.gemseconomy.cheque.ChequeManager;
 import me.xanium.gemseconomy.commands.*;
 import me.xanium.gemseconomy.currency.CurrencyManager;
 import me.xanium.gemseconomy.data.DataStorage;
-import me.xanium.gemseconomy.data.MySQLStorage;
-import me.xanium.gemseconomy.data.YamlStorage;
+import me.xanium.gemseconomy.data.MysqlHandler;
+import me.xanium.gemseconomy.data.YamlHandler;
 import me.xanium.gemseconomy.file.Configuration;
 import me.xanium.gemseconomy.listeners.EconomyListener;
 import me.xanium.gemseconomy.logging.EconomyLogger;
@@ -35,7 +34,6 @@ public class GemsEconomy extends JavaPlugin {
 
     private DataStorage dataStorage = null;
     private AccountManager accountManager;
-    private ChequeManager chequeManager;
     private CurrencyManager currencyManager;
     private VaultHandler vaultHandler;
     private Metrics metrics;
@@ -104,7 +102,6 @@ public class GemsEconomy extends JavaPlugin {
         getCommand("economy").setExecutor(new EconomyCommand());
         getCommand("pay").setExecutor(new PayCommand());
         getCommand("currency").setExecutor(new CurrencyCommand());
-        getCommand("cheque").setExecutor(new ChequeCommand());
         getCommand("exchange").setExecutor(new ExchangeCommand());
 
         if (isVault()) {
@@ -119,10 +116,6 @@ public class GemsEconomy extends JavaPlugin {
 
         if (isLogging()) {
             getEconomyLogger().save();
-        }
-
-        if(isChequesEnabled()){
-            chequeManager = new ChequeManager(this);
         }
 
         SchedulerUtils.runAsync(this::checkForUpdate);
@@ -141,8 +134,8 @@ public class GemsEconomy extends JavaPlugin {
 
     public void initializeDataStore(String strategy, boolean load) {
 
-        DataStorage.getMethods().add(new YamlStorage(new File(getDataFolder(), "data.yml")));
-        DataStorage.getMethods().add(new MySQLStorage(getConfig().getString("mysql.host"), getConfig().getInt("mysql.port"), getConfig().getString("mysql.database"), getConfig().getString("mysql.username"), getConfig().getString("mysql.password")));
+        DataStorage.getMethods().add(new YamlHandler(new File(getDataFolder(), "data.yml")));
+        DataStorage.getMethods().add(new MysqlHandler());
 
         // Disabled. Not many are using SQLite anyway. And MySQL has much better performance!
         //DataStorage.getMethods().add(new SQLiteStorage(new File(getDataFolder(), getConfig().getString("sqlite.file"))));
@@ -217,10 +210,6 @@ public class GemsEconomy extends JavaPlugin {
 
     public Metrics getMetrics() {
         return metrics;
-    }
-
-    public ChequeManager getChequeManager() {
-        return chequeManager;
     }
 
     public UpdateForwarder getUpdateForwarder() {

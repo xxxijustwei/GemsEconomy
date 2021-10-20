@@ -25,12 +25,12 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.UUID;
 
-public class YamlStorage extends DataStorage {
+public class YamlHandler extends DataStorage {
 
     private YamlConfiguration configuration;
     private File file;
 
-    public YamlStorage(File file) {
+    public YamlHandler(File file) {
         super("YAML", false);
         this.file = file;
     }
