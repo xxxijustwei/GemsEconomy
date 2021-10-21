@@ -64,7 +64,7 @@ public class AccountManager {
 
     public Account getAccount(UUID uuid) {
         for (Account account : this.accounts) { // This throws CME randomly
-            if (!account.getUuid().equals(uuid)) continue;
+            if (!account.getUUID().equals(uuid)) continue;
             return account;
         }
         return plugin.getDataStore().loadAccount(uuid);
@@ -73,7 +73,7 @@ public class AccountManager {
     public void removeAccount(UUID uuid){
         for(int i = 0; i < this.accounts.size(); i++){
             Account a = getAccounts().get(i);
-            if(a.getUuid().equals(uuid)){
+            if(a.getUUID().equals(uuid)){
                 accounts.remove(i);
                 break;
             }

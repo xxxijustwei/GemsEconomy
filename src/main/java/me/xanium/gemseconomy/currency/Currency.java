@@ -120,13 +120,5 @@ public class Currency {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
-
-    public double getExchangeRate() {
-        return exchangeRate;
-    }
-
-    public void setExchangeRate(double exchangeRate) {
-        this.exchangeRate = exchangeRate;
-    }
 }
 

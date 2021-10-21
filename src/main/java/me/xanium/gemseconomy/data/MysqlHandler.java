@@ -53,7 +53,6 @@ public class MysqlHandler extends DataStorage {
                 boolean isDefault = result.getInt("is_default") == 1;
                 boolean payable = result.getInt("payable") == 1;
                 ChatColor color = ChatColor.valueOf(result.getString("color"));
-                double exchangeRate = result.getDouble("exchange_rate");
 
                 Currency currency = new Currency(uuid, identifier, displayName);
                 currency.setDefaultBalance(defaultBalance);
@@ -62,7 +61,6 @@ public class MysqlHandler extends DataStorage {
                 currency.setDefaultCurrency(isDefault);
                 currency.setPayable(payable);
                 currency.setColor(color);
-                currency.setExchangeRate(exchangeRate);
 
                 plugin.getCurrencyManager().add(currency);
                 UtilServer.consoleLog("Loaded currency: " + currency.getIdentifier() + " (" + currency.getDisplayName() + ")");
@@ -83,7 +81,6 @@ public class MysqlHandler extends DataStorage {
                 boolean isDefault = result.getInt("is_default") == 1;
                 boolean payable = result.getInt("payable") == 1;
                 ChatColor color = ChatColor.valueOf(result.getString("color"));
-                double exchangeRate = result.getDouble("exchange_rate");
 
                 currency.setDefaultBalance(defaultBalance);
                 currency.setSymbol(symbol);
@@ -91,7 +88,6 @@ public class MysqlHandler extends DataStorage {
                 currency.setDefaultCurrency(isDefault);
                 currency.setPayable(payable);
                 currency.setColor(color);
-                currency.setExchangeRate(exchangeRate);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,8 +107,7 @@ public class MysqlHandler extends DataStorage {
                         "is_decimals",
                         "is_default",
                         "payable",
-                        "color",
-                        "exchange_rate"
+                        "color"
                 },
                 new Object[] {
                         currency.getUUID().toString(),
@@ -123,8 +118,7 @@ public class MysqlHandler extends DataStorage {
                         currency.isDecimalSupported() ? 1 : 0,
                         currency.isDefaultCurrency() ? 1 : 0,
                         currency.isPayable() ? 1 : 0,
-                        currency.getColor().name(),
-                        currency.getExchangeRate()
+                        currency.getColor().name()
                 }
         );
     }
@@ -261,7 +255,7 @@ public class MysqlHandler extends DataStorage {
             UUID cid = currency.getUUID();
             double balance = account.getBalance(currency);
             datum.add(new Object[] {
-                    account.getUuid().toString(),
+                    account.getUUID().toString(),
                     account.getNickname(),
                     cid.toString(),
                     balance
@@ -285,7 +279,7 @@ public class MysqlHandler extends DataStorage {
         dataManager.executeDelete(
                 EconomyTables.ECONOMY_ACCOUNT.getTableName(),
                 "uuid",
-                account.getUuid().toString()
+                account.getUUID().toString()
         );
     }
 
@@ -297,7 +291,7 @@ public class MysqlHandler extends DataStorage {
             UUID cid = currency.getUUID();
             double balance = account.getBalance(currency);
             datum[i] = new Object[] {
-                    account.getUuid().toString(),
+                    account.getUUID().toString(),
                     account.getNickname(),
                     cid.toString(),
                     balance

@@ -72,7 +72,6 @@ public class YamlHandler extends DataStorage {
                 currency.setDefaultCurrency(getConfig().getBoolean(path + ".defaultcurrency"));
                 currency.setPayable(getConfig().getBoolean(path + ".payable"));
                 currency.setSymbol(getConfig().getString(path + ".symbol"));
-                currency.setExchangeRate(getConfig().getDouble(path + ".exchange_rate"));
                 plugin.getCurrencyManager().add(currency);
                 UtilServer.consoleLog("Loaded currency: " + currency.getIdentifier());
             }
@@ -90,7 +89,6 @@ public class YamlHandler extends DataStorage {
         getConfig().set(path + ".defaultcurrency", currency.isDefaultCurrency());
         getConfig().set(path + ".payable", currency.isPayable());
         getConfig().set(path + ".color", currency.getColor().name());
-        getConfig().set(path + ".exchange_rate", currency.getExchangeRate());
         try {
             getConfig().save(getFile());
         } catch (IOException e) {
@@ -115,7 +113,7 @@ public class YamlHandler extends DataStorage {
     }
 
     private void loadBalances(Account account) {
-        String path = "accounts." + account.getUuid().toString();
+        String path = "accounts." + account.getUUID().toString();
         ConfigurationSection bsection = getConfig().getConfigurationSection(path + ".balances");
         if (bsection != null) {
             Set<String> balances = bsection.getKeys(false);
@@ -212,9 +210,9 @@ public class YamlHandler extends DataStorage {
 
     @Override
     public void saveAccount(Account account) {
-        String path = "accounts." + account.getUuid().toString();
+        String path = "accounts." + account.getUUID().toString();
         getConfig().set(path + ".nickname", account.getNickname());
-        getConfig().set(path + ".uuid", account.getUuid().toString());
+        getConfig().set(path + ".uuid", account.getUUID().toString());
         for (Currency currency : account.getBalances().keySet()) {
             double balance = account.getBalance(currency);
             getConfig().set(path + ".balances." + currency.getUUID().toString(), balance);
@@ -229,7 +227,7 @@ public class YamlHandler extends DataStorage {
 
     @Override
     public void deleteAccount(Account account) {
-        String path = "accounts." + account.getUuid().toString();
+        String path = "accounts." + account.getUUID().toString();
         getConfig().set(path, null);
         try {
             getConfig().save(getFile());

@@ -95,12 +95,6 @@ public class Message {
         }
     }
 
-    public static void getExchangeHelp(CommandSender sender) {
-        for (String s : cfg.getStringList("Messages.help.exchange_command")) {
-            sender.sendMessage(colorize(s.replace("{prefix}", getPrefix())));
-        }
-    }
-
     public static String getBalance() {
         return getPrefix() + colorize(cfg.getString("Messages.balance.current"));
     }
@@ -179,46 +173,14 @@ public class Message {
     public static String getCurrencyUsage_Default() { return get("Messages.usage.currency_default"); }
     public static String getCurrencyUsage_List() { return get("Messages.usage.currency_list"); }
     public static String getCurrencyUsage_Color() { return get("Messages.usage.currency_color"); }
-    public static String getCurrencyUsage_Colorlist() { return get("Messages.usage.currency_colorlist"); }
     public static String getCurrencyUsage_Payable() { return get("Messages.usage.currency_payable"); }
     public static String getCurrencyUsage_Startbal() { return get("Messages.usage.currency_startbal"); }
     public static String getCurrencyUsage_Decimals() { return get("Messages.usage.currency_decimals"); }
     public static String getCurrencyUsage_Symbol() { return get("Messages.usage.currency_symbol"); }
-    public static String getCurrencyUsage_Rate() { return get("Messages.usage.currency_setrate"); }
-    public static String getCurrencyUsage_Backend() {
-        return get("Messages.usage.currency_backend");
-    }
-    public static String getCurrencyUsage_Convert() {
-        return get("Messages.usage.currency_convert");
-    }
 
     public static void sendCurrencyUsage(CommandSender sender){
         for(String s : getList("Messages.help.currency_command")){
             sender.sendMessage(s.replace("{prefix}", getPrefix()));
         }
-    }
-
-    public static String getExchangeSuccess(){
-        return getPrefix() + colorize(cfg.getString("Messages.exchange_success"));
-    }
-
-    public static String getExchangeSuccessCustom(){
-        return getPrefix() + colorize(cfg.getString("Messages.exchange_success_custom"));
-    }
-
-    public static String getExchangeSuccessCustomOther(){
-        return getPrefix() + colorize(cfg.getString("Messages.exchange_success_custom_other"));
-    }
-
-    public static String getExchangeRateSet(){
-        return getPrefix() + colorize(cfg.getString("Messages.exchange_rate_set"));
-    }
-
-    public static String getExchangeNoPermCustom(){
-        return getPrefix() + colorize(cfg.getString("Messages.exchange_command.no_perms.custom"));
-    }
-
-    public static String getExchangeNoPermPreset(){
-        return getPrefix() + colorize(cfg.getString("Messages.exchange_command.no_perms.preset"));
     }
 }

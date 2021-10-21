@@ -83,6 +83,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.taylorswiftcn</groupId>
+            <artifactId>MegumiLib</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>

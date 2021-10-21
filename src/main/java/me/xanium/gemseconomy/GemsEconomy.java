@@ -97,12 +97,11 @@ public class GemsEconomy extends JavaPlugin {
         initializeDataStore(getConfig().getString("storage"), true);
 
         getServer().getPluginManager().registerEvents(new EconomyListener(), this);
-        getCommand("balance").setExecutor(new BalanceCommand());
-        getCommand("baltop").setExecutor(new BalanceTopCommand());
+        getCommand("balance").setExecutor(new BalanceMainCommand());
+        getCommand("baltop").setExecutor(new BalTopMainCommand());
         getCommand("economy").setExecutor(new EconomyCommand());
-        getCommand("pay").setExecutor(new PayCommand());
+        getCommand("pay").setExecutor(new PayMainCommand());
         getCommand("currency").setExecutor(new CurrencyCommand());
-        getCommand("exchange").setExecutor(new ExchangeCommand());
 
         if (isVault()) {
             vaultHandler = new VaultHandler(this);

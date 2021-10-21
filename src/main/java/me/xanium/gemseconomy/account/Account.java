@@ -46,6 +46,9 @@ public class Account {
     }
 
     public boolean withdraw(Currency currency, double amount) {
+        if (!currency.isDecimalSupported()) {
+            amount = (int) amount;
+        }
         if (hasEnough(currency, amount)) {
             GemsTransactionEvent event = new GemsTransactionEvent(currency, this, amount, TranactionType.WITHDRAW);
             SchedulerUtils.run(() -> Bukkit.getPluginManager().callEvent(event));
@@ -60,8 +63,10 @@ public class Account {
     }
 
     public boolean deposit(Currency currency, double amount) {
+        if (!currency.isDecimalSupported()) {
+            amount = (int) amount;
+        }
         if (canReceiveCurrency()) {
-
             GemsTransactionEvent event = new GemsTransactionEvent(currency, this, amount, TranactionType.DEPOSIT);
             SchedulerUtils.run(() -> Bukkit.getPluginManager().callEvent(event));
             if(event.isCancelled())return false;
@@ -71,75 +76,6 @@ public class Account {
             GemsEconomy.getInstance().getEconomyLogger().log("[DEPOSIT] Account: " + getDisplayName() + " were deposited: " + currency.format(amount) + " and now has " + currency.format(finalAmount));
             return true;
         }
-        return false;
-    }
-
-    public boolean convert(Currency exchanged, double exchangeAmount, Currency received, double amount) {
-        GemsConversionEvent event = new GemsConversionEvent(exchanged, received, this, exchangeAmount, amount);
-        SchedulerUtils.run(() -> Bukkit.getPluginManager().callEvent(event));
-        if(event.isCancelled())return false;
-
-        if (amount != -1) {
-            double removed = getBalance(exchanged) - exchangeAmount;
-            double added = getBalance(received) + amount;
-            modifyBalance(exchanged, removed, false);
-            modifyBalance(received, added, false);
-            GemsEconomy.getInstance().getDataStore().saveAccount(this);
-            GemsEconomy.getInstance().getEconomyLogger().log("[CONVERSION - Custom Amount] Account: " + getDisplayName() + " converted " + exchanged.format(exchangeAmount) + " to " + received.format(amount));
-            return true;
-        }
-        double rate;
-        boolean receiveRate = false;
-
-        if(exchanged.getExchangeRate() > received.getExchangeRate()){
-            rate = exchanged.getExchangeRate();
-        }else{
-            rate = received.getExchangeRate();
-            receiveRate = true;
-        }
-
-        if(!receiveRate){
-
-            double finalAmount = Math.round(exchangeAmount * rate);
-            double removed = getBalance(exchanged) - exchangeAmount;
-            double added = getBalance(received) + finalAmount;
-
-            if(GemsEconomy.getInstance().isDebug()){
-                UtilServer.consoleLog("Rate: " + rate);
-                UtilServer.consoleLog("Finalized amount: " + finalAmount);
-                UtilServer.consoleLog("Amount to remove: " + exchanged.format(removed));
-                UtilServer.consoleLog("Amount to add: " + received.format(added));
-            }
-
-            if(hasEnough(exchanged, exchangeAmount)){
-                this.modifyBalance(exchanged, removed, false);
-                this.modifyBalance(received, added, false);
-                GemsEconomy.getInstance().getDataStore().saveAccount(this);
-                GemsEconomy.getInstance().getEconomyLogger().log("[CONVERSION - Preset Rate] Account: " + getDisplayName() + " converted " + exchanged.format(removed) + " (Rate: " + rate + ") to " + received.format(added));
-                return true;
-            }
-            return false;
-        }
-
-        double finalAmount = Math.round(exchangeAmount * rate);
-        double removed = getBalance(exchanged) - finalAmount;
-        double added = getBalance(received) + exchangeAmount;
-
-        if(GemsEconomy.getInstance().isDebug()){
-            UtilServer.consoleLog("Rate: " + rate);
-            UtilServer.consoleLog("Finalized amount: " + finalAmount);
-            UtilServer.consoleLog("Amount to remove: " + exchanged.format(removed));
-            UtilServer.consoleLog("Amount to add: " + received.format(added));
-        }
-
-        if(hasEnough(exchanged, finalAmount)){
-            this.modifyBalance(exchanged, removed, false);
-            this.modifyBalance(received, added, false);
-            GemsEconomy.getInstance().getDataStore().saveAccount(this);
-            GemsEconomy.getInstance().getEconomyLogger().log("[CONVERSION - Preset Rate] Account: " + getDisplayName() + " converted " + exchanged.format(removed) + " (Rate: " + rate + ") to " + received.format(added));
-            return true;
-        }
-
         return false;
     }
 
@@ -186,7 +122,7 @@ public class Account {
     }
 
     public String getDisplayName() {
-        return getNickname() != null ? getNickname() : getUuid().toString();
+        return getNickname() != null ? getNickname() : getUUID().toString();
     }
 
     public void setNickname(String nickname) {
@@ -197,7 +133,7 @@ public class Account {
         return nickname;
     }
 
-    public UUID getUuid() {
+    public UUID getUUID() {
         return uuid;
     }
 

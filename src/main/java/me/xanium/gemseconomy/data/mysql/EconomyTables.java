@@ -22,8 +22,7 @@ public enum EconomyTables {
                     "`is_decimals` int",
                     "`is_default` int",
                     "`payable` int",
-                    "`color` varchar(32)",
-                    "`exchange_rate` decimal(19,4)"
+                    "`color` varchar(32)"
             }
     ));
 
