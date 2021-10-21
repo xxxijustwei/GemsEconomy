@@ -10,11 +10,9 @@ package me.xanium.gemseconomy.account;
 
 import me.xanium.gemseconomy.GemsEconomy;
 import me.xanium.gemseconomy.currency.Currency;
-import me.xanium.gemseconomy.event.GemsConversionEvent;
 import me.xanium.gemseconomy.event.GemsTransactionEvent;
 import me.xanium.gemseconomy.utils.SchedulerUtils;
 import me.xanium.gemseconomy.utils.TranactionType;
-import me.xanium.gemseconomy.utils.UtilServer;
 import org.bukkit.Bukkit;
 
 import java.util.*;
