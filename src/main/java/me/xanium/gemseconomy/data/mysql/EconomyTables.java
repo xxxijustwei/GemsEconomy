@@ -19,6 +19,7 @@ public enum EconomyTables {
                     "`displayname` varchar(16) NOT NULL",
                     "`default_balance` decimal(19,4) default 0",
                     "`symbol` varchar(8)",
+                    "`is_decimals` int",
                     "`is_default` int",
                     "`payable` int",
                     "`color` varchar(32)",
