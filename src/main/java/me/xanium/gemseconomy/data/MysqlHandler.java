@@ -285,9 +285,9 @@ public class MysqlHandler extends DataStorage {
 
     @Override
     public void createAccount(Account account) {
-        Object[][] datum = new Object[account.getBalances().size()][];
+        Object[][] datum = new Object[plugin.getCurrencyManager().getCurrencies().size()][];
         int i = 0;
-        for (Currency currency : account.getBalances().keySet()) {
+        for (Currency currency : plugin.getCurrencyManager().getCurrencies()) {
             UUID cid = currency.getUUID();
             double balance = account.getBalance(currency);
             datum[i] = new Object[] {
