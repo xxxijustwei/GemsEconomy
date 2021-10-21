@@ -7,9 +7,12 @@ website: https://www.spigotmc.org/resources/gemseconomy.19655/
 load: STARTUP
 loadbefore:
   - ItemFrameShops
+depend:
+  - MegumiLib
+  - DataManager
+  - PlaceholderAPI
 softdepend:
   - Vault
-  - DataManager
 commands:
   balance:
     description: Shows your balances

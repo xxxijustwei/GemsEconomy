@@ -8,6 +8,7 @@
 
 package me.xanium.gemseconomy.currency;
 
+import com.taylorswiftcn.justwei.util.UnitConvert;
 import me.xanium.gemseconomy.utils.UtilString;
 import org.bukkit.ChatColor;
 
@@ -62,21 +63,21 @@ public class Currency {
     }
 
     public String format(double amount) {
+        return format(amount, true);
+    }
+
+    public String format(double amount, boolean symbol) {
         StringBuilder amt = new StringBuilder();
-        if (this.getSymbol() != null) {
+        if (this.getSymbol() != null && symbol) {
             amt.append(this.getSymbol());
         }
         if (this.isDecimalSupported()) {
-            amt.append(UtilString.format(amount));
+            amt.append(UnitConvert.getFormatLong((long) amount));
         } else {
-            String s = String.valueOf(amount);
-            String[] ss = s.split("\\.");
-            if (ss.length > 0) {
-                s = ss[0];
-            }
-            amt.append(NumberFormat.getInstance().format(Double.parseDouble(s)));
+            amt.append(UnitConvert.getFormatLong((int) amount));
         }
         amt.append(" ");
+        amt.append(color);
         amt.append(displayName);
         return amt.toString();
     }

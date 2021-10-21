@@ -18,19 +18,6 @@ public class GemsEconomyAPI {
 
     public final GemsEconomy plugin = GemsEconomy.getInstance();
 
-    public GemsEconomyAPI(){
-        if(plugin.getCurrencyManager().getDefaultCurrency() == null){
-            GemsEconomy.getInstance().getLogger().warning("||");
-            GemsEconomy.getInstance().getLogger().warning("||");
-            GemsEconomy.getInstance().getLogger().warning("||");
-            GemsEconomy.getInstance().getLogger().warning("There is no default currency, so therefore none of the API will work!!!");
-            GemsEconomy.getInstance().getLogger().warning("There is no default currency, so therefore none of the API will work!!!");
-            GemsEconomy.getInstance().getLogger().warning("||");
-            GemsEconomy.getInstance().getLogger().warning("||");
-            GemsEconomy.getInstance().getLogger().warning("||");
-        }
-    }
-
     /**
      *
      * @param uuid - The users unique ID.

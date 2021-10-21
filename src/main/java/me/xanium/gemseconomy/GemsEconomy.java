@@ -16,6 +16,7 @@ import me.xanium.gemseconomy.data.DataStorage;
 import me.xanium.gemseconomy.data.MysqlHandler;
 import me.xanium.gemseconomy.data.YamlHandler;
 import me.xanium.gemseconomy.file.Configuration;
+import me.xanium.gemseconomy.hook.EconomyPlaceholder;
 import me.xanium.gemseconomy.listeners.EconomyListener;
 import me.xanium.gemseconomy.logging.EconomyLogger;
 import me.xanium.gemseconomy.utils.Metrics;
@@ -43,7 +44,6 @@ public class GemsEconomy extends JavaPlugin {
     private boolean debug = false;
     private boolean vault = false;
     private boolean logging = false;
-    private boolean cheques = true;
 
     private boolean disabling = false;
 
@@ -82,7 +82,6 @@ public class GemsEconomy extends JavaPlugin {
         setDebug(getConfig().getBoolean("debug"));
         setVault(getConfig().getBoolean("vault"));
         setLogging(getConfig().getBoolean("transaction_log"));
-        setCheques(getConfig().getBoolean("cheque.enabled"));
     }
 
     @Override
@@ -102,6 +101,8 @@ public class GemsEconomy extends JavaPlugin {
         getCommand("economy").setExecutor(new EconomyCommand());
         getCommand("pay").setExecutor(new PayMainCommand());
         getCommand("currency").setExecutor(new CurrencyCommand());
+
+        new EconomyPlaceholder().register();
 
         if (isVault()) {
             vaultHandler = new VaultHandler(this);
@@ -242,13 +243,5 @@ public class GemsEconomy extends JavaPlugin {
 
     public boolean isDisabling() {
         return disabling;
-    }
-
-    public boolean isChequesEnabled() {
-        return cheques;
-    }
-
-    public void setCheques(boolean cheques) {
-        this.cheques = cheques;
     }
 }
