@@ -19,15 +19,11 @@ import me.xanium.gemseconomy.file.Configuration;
 import me.xanium.gemseconomy.hook.EconomyPlaceholder;
 import me.xanium.gemseconomy.listeners.EconomyListener;
 import me.xanium.gemseconomy.logging.EconomyLogger;
-import me.xanium.gemseconomy.utils.Metrics;
-import me.xanium.gemseconomy.utils.SchedulerUtils;
-import me.xanium.gemseconomy.utils.Updater;
 import me.xanium.gemseconomy.utils.UtilServer;
 import me.xanium.gemseconomy.vault.VaultHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
 
 public class GemsEconomy extends JavaPlugin {
 
@@ -37,7 +33,6 @@ public class GemsEconomy extends JavaPlugin {
     private AccountManager accountManager;
     private CurrencyManager currencyManager;
     private VaultHandler vaultHandler;
-    private Metrics metrics;
     private EconomyLogger economyLogger;
     private UpdateForwarder updateForwarder;
 
@@ -90,7 +85,6 @@ public class GemsEconomy extends JavaPlugin {
         accountManager = new AccountManager(this);
         currencyManager = new CurrencyManager(this);
         economyLogger = new EconomyLogger(this);
-        metrics = new Metrics(this);
         updateForwarder = new UpdateForwarder(this);
 
         initializeDataStore(getConfig().getString("storage"), true);
@@ -117,8 +111,6 @@ public class GemsEconomy extends JavaPlugin {
         if (isLogging()) {
             getEconomyLogger().save();
         }
-
-        SchedulerUtils.runAsync(this::checkForUpdate);
     }
 
     @Override
@@ -166,24 +158,6 @@ public class GemsEconomy extends JavaPlugin {
         }
     }
 
-    private void checkForUpdate() {
-        Updater updater = new Updater(this);
-        try {
-            if (updater.checkForUpdates()) {
-                UtilServer.consoleLog("-------------------------------------------");
-                UtilServer.consoleLog("New Version: " + updater.getNewVersion());
-                UtilServer.consoleLog("Current Version: " + updater.getCurrentVersion());
-                UtilServer.consoleLog("Download link: " + updater.getResourceURL());
-                UtilServer.consoleLog("--------------------------------------------");
-            }
-        } catch (IOException e) {
-            UtilServer.consoleLog("Could not check for updates! Error log will follow if debug is enabled.");
-            if (isDebug()) {
-                UtilServer.consoleLog(e.getCause());
-            }
-        }
-    }
-
     public DataStorage getDataStore() {
         return dataStorage;
     }
@@ -207,15 +181,6 @@ public class GemsEconomy extends JavaPlugin {
     public EconomyLogger getEconomyLogger() {
         return economyLogger;
     }
-
-    public Metrics getMetrics() {
-        return metrics;
-    }
-
-    public UpdateForwarder getUpdateForwarder() {
-        return updateForwarder;
-    }
-
 
     public boolean isDebug() {
         return debug;
@@ -243,5 +208,9 @@ public class GemsEconomy extends JavaPlugin {
 
     public boolean isDisabling() {
         return disabling;
+    }
+
+    public UpdateForwarder getUpdateForwarder() {
+        return updateForwarder;
     }
 }
