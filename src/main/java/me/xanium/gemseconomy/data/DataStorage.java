@@ -15,6 +15,7 @@ import me.xanium.gemseconomy.currency.Currency;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 public abstract class DataStorage {
@@ -75,6 +76,8 @@ public abstract class DataStorage {
      * @param account - Account to save to sql. See EconomyListener.java
      */
     public abstract void createAccount(Account account);
+
+    public abstract void addAccountCurrencies(UUID uuid, String name, List<Currency> currencies);
 
     public abstract ArrayList<Account> getOfflineAccounts();
 

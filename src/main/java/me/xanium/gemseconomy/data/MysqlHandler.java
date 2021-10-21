@@ -49,6 +49,7 @@ public class MysqlHandler extends DataStorage {
                 String displayName = result.getString("displayname");
                 double defaultBalance = result.getDouble("default_balance");
                 String symbol = result.getString("symbol");
+                boolean isDecimals = result.getInt("is_decimals") == 1;
                 boolean isDefault = result.getInt("is_default") == 1;
                 boolean payable = result.getInt("payable") == 1;
                 ChatColor color = ChatColor.valueOf(result.getString("color"));
@@ -57,7 +58,7 @@ public class MysqlHandler extends DataStorage {
                 Currency currency = new Currency(uuid, identifier, displayName);
                 currency.setDefaultBalance(defaultBalance);
                 currency.setSymbol(symbol);
-                currency.setDecimalSupported(true);
+                currency.setDecimalSupported(isDecimals);
                 currency.setDefaultCurrency(isDefault);
                 currency.setPayable(payable);
                 currency.setColor(color);
@@ -78,6 +79,7 @@ public class MysqlHandler extends DataStorage {
             if (result.next()) {
                 double defaultBalance = result.getDouble("default_balance");
                 String symbol = result.getString("symbol");
+                boolean isDecimals = result.getInt("is_decimals") == 1;
                 boolean isDefault = result.getInt("is_default") == 1;
                 boolean payable = result.getInt("payable") == 1;
                 ChatColor color = ChatColor.valueOf(result.getString("color"));
@@ -85,6 +87,7 @@ public class MysqlHandler extends DataStorage {
 
                 currency.setDefaultBalance(defaultBalance);
                 currency.setSymbol(symbol);
+                currency.setDecimalSupported(isDecimals);
                 currency.setDefaultCurrency(isDefault);
                 currency.setPayable(payable);
                 currency.setColor(color);
@@ -105,6 +108,7 @@ public class MysqlHandler extends DataStorage {
                         "displayname",
                         "default_balance",
                         "symbol",
+                        "is_decimals",
                         "is_default",
                         "payable",
                         "color",
@@ -116,6 +120,7 @@ public class MysqlHandler extends DataStorage {
                         currency.getDisplayName(),
                         currency.getDefaultBalance(),
                         currency.getSymbol(),
+                        currency.isDecimalSupported() ? 1 : 0,
                         currency.isDefaultCurrency() ? 1 : 0,
                         currency.isPayable() ? 1 : 0,
                         currency.getColor().name(),
@@ -194,6 +199,10 @@ public class MysqlHandler extends DataStorage {
 
                 account.getBalances().put(currency, balance);
             }
+
+            if (account != null) {
+                account.initBalance();
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
@@ -217,6 +226,10 @@ public class MysqlHandler extends DataStorage {
                 if (currency == null) continue;
 
                 account.getBalances().put(currency, balance);
+            }
+
+            if (account != null) {
+                account.initBalance();
             }
         }
         catch (SQLException e) {
@@ -288,6 +301,32 @@ public class MysqlHandler extends DataStorage {
                     account.getNickname(),
                     cid.toString(),
                     balance
+            };
+            i++;
+        }
+
+        dataManager.executeInsert(
+                EconomyTables.ECONOMY_ACCOUNT.getTableName(),
+                new String[] {
+                        "uuid",
+                        "player",
+                        "currency",
+                        "balance"
+                },
+                datum
+        );
+    }
+
+    @Override
+    public void addAccountCurrencies(UUID uuid, String name, List<Currency> currencies) {
+        Object[][] datum = new Object[currencies.size()][];
+        int i = 0;
+        for (Currency currency : currencies) {
+            datum[i] = new Object[] {
+                    uuid.toString(),
+                    name,
+                    currency.getUUID().toString(),
+                    currency.getDefaultBalance()
             };
             i++;
         }

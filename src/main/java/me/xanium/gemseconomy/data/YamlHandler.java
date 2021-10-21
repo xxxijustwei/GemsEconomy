@@ -20,10 +20,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class YamlHandler extends DataStorage {
 
@@ -149,6 +146,11 @@ public class YamlHandler extends DataStorage {
     @Override
     public void createAccount(Account account) {
         throw new UnsupportedOperationException("YAML does not utilize #createAccount()!");
+    }
+
+    @Override
+    public void addAccountCurrencies(UUID uuid, String name, List<Currency> currencies) {
+        throw new UnsupportedOperationException("YAML does not utilize #addAccountCurrencies()!");
     }
 
     @Override

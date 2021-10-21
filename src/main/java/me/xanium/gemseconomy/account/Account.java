@@ -17,9 +17,7 @@ import me.xanium.gemseconomy.utils.TranactionType;
 import me.xanium.gemseconomy.utils.UtilServer;
 import org.bukkit.Bukkit;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Account {
 
@@ -31,13 +29,19 @@ public class Account {
     public Account(UUID uuid, String nickname) {
         this.uuid = uuid;
         this.nickname = nickname;
-        this.initBalance();
+        this.balances = new HashMap<>();
     }
 
     public void initBalance() {
-        balances = new HashMap<>();
+        List<Currency> currencies = new ArrayList<>();
         for (Currency currency : GemsEconomy.getInstance().getCurrencyManager().getCurrencies()) {
+            if (balances.containsKey(currency)) continue;
+            currencies.add(currency);
             balances.put(currency, currency.getDefaultBalance());
+        }
+
+        if (!currencies.isEmpty()) {
+            GemsEconomy.getInstance().getDataStore().addAccountCurrencies(uuid, nickname, currencies);
         }
     }
 
