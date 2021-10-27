@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.xanium</groupId>
-    <artifactId>GemsEconomy-SNAPSHOT</artifactId>
-    <version>4.9.3</version>
+    <artifactId>GemsEconomy</artifactId>
+    <version>4.9.3-SNAPSHOT</version>
 
     <build>
         <defaultGoal>package</defaultGoal>
