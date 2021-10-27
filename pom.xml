@@ -1,49 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright Xanium Development (c) 2013-2018. All Rights Reserved.
-  ~ Any code contained within this document, and any associated APIs with similar branding
-  ~ are the sole property of Xanium Development. Distribution, reproduction, taking snippets or claiming
-  ~ any contents as your own will break the terms of the license, and void any agreements with you, the third party.
-  ~ Thank you.
-  -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.xanium</groupId>
-    <artifactId>GemsEconomy</artifactId>
+    <artifactId>GemsEconomy-SNAPSHOT</artifactId>
     <version>4.9.3</version>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
-    </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>codemc-releases</id>
-            <url>https://repo.codemc.io/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>codemc-snapshots</id>
-            <url>https://repo.codemc.io/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
-
     <build>
-        <defaultGoal>clean package</defaultGoal>
+        <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -55,27 +29,26 @@
         </resources>
     </build>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ycraft</id>
+            <url>https://maven.ycraft.cn/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>codemc-repo</id>
-            <url>https://repo.codemc.org/repository/maven-public/</url>
-            <layout>default</layout>
-        </repository>
         <repository>
             <id>ycraft</id>
             <url>https://maven.ycraft.cn/repository/maven-public/</url>
         </repository>
+
         <repository>
-            <id>placeholderapi</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
 
@@ -87,20 +60,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>net.sakuragame</groupId>
+            <artifactId>DataManager-Bukkit-API</artifactId>
+            <version>1.1.2-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.taylorswiftcn</groupId>
             <artifactId>MegumiLib</artifactId>
-            <version>1.0</version>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sakuragame</groupId>
-            <artifactId>DataManager-Bukkit-API</artifactId>
-            <version>1.1.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
