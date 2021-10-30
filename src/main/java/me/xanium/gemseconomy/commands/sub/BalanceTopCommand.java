@@ -1,8 +1,8 @@
 package me.xanium.gemseconomy.commands.sub;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.currency.CachedTopListEntry;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.file.Message;
@@ -18,7 +18,7 @@ public class BalanceTopCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender sender, String[] strings) {
+    public void perform(CommandSender sender, String[] args) {
         if (!plugin.getDataStore().isTopSupported()) {
             sender.sendMessage(Message.getBalanceTopNoSupport().replace("{storage}", plugin.getDataStore().getName()));
             return;
@@ -26,17 +26,17 @@ public class BalanceTopCommand extends SubCommand {
 
         Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
         int page = 1;
-        if (strings.length > 0) {
-            currency = plugin.getCurrencyManager().getCurrency(strings[0]);
+        if (args.length > 0) {
+            currency = plugin.getCurrencyManager().getCurrency(args[0]);
             if (currency == null) {
                 sender.sendMessage(Message.getUnknownCurrency());
                 return;
             }
         }
 
-        if (strings.length > 1) {
+        if (args.length > 1) {
             try {
-                page = Math.max(1, Integer.parseInt(strings[1]));
+                page = Math.max(1, Integer.parseInt(args[1]));
             } catch (NumberFormatException ex) {
                 sender.sendMessage(Message.getUnvalidPage());
                 return;
@@ -85,6 +85,6 @@ public class BalanceTopCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.ADMIN.name();
+        return CommandPerms.ADMIN.getNode();
     }
 }

@@ -1,9 +1,9 @@
 package me.xanium.gemseconomy.commands.sub;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
 import me.xanium.gemseconomy.account.Account;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.file.Message;
 import me.xanium.gemseconomy.utils.SchedulerUtils;
@@ -20,17 +20,17 @@ public class BalanceCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
+    public void perform(CommandSender sender, String[] args) {
         SchedulerUtils.runAsync(() -> {
-            if (strings.length == 0 && commandSender instanceof Player) {
+            if (args.length == 0 && sender instanceof Player) {
                 Account account = plugin.getAccountManager().getAccount(getPlayer());
-                sendAccountInfo(commandSender, account);
+                sendAccountInfo(sender, account);
                 return;
             }
 
-            if (strings.length > 1) {
-                Account account = plugin.getAccountManager().getAccount(strings[0]);
-                sendAccountInfo(commandSender, account);
+            if (args.length > 1) {
+                Account account = plugin.getAccountManager().getAccount(args[0]);
+                sendAccountInfo(sender, account);
             }
         });
     }
@@ -72,6 +72,6 @@ public class BalanceCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.USER.name();
+        return CommandPerms.USER.getNode();
     }
 }

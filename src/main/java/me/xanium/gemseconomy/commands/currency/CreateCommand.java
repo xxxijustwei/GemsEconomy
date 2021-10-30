@@ -1,8 +1,8 @@
 package me.xanium.gemseconomy.commands.currency;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.file.Message;
 import org.bukkit.command.CommandSender;
 
@@ -16,21 +16,21 @@ public class CreateCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
-        if (strings.length < 3) {
-            commandSender.sendMessage(Message.getCurrencyUsage_Create());
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length < 3) {
+            sender.sendMessage(Message.getCurrencyUsage_Create());
             return;
         }
 
-        String identifier = strings[1];
-        String displayName = strings[2];
+        String identifier = args[1];
+        String displayName = args[2];
         if (plugin.getCurrencyManager().currencyExist(identifier)) {
-            commandSender.sendMessage(Message.getPrefix() + "§cCurrency already exists.");
+            sender.sendMessage(Message.getPrefix() + "§cCurrency already exists.");
             return;
         }
 
         plugin.getCurrencyManager().createNewCurrency(identifier, displayName);
-        commandSender.sendMessage(Message.getPrefix() + "§7Created currency: §a" + identifier);
+        sender.sendMessage(Message.getPrefix() + "§7Created currency: §a" + identifier);
     }
 
     @Override
@@ -40,6 +40,6 @@ public class CreateCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.ADMIN.name();
+        return CommandPerms.ADMIN.getNode();
     }
 }

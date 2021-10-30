@@ -8,12 +8,12 @@
 
 package me.xanium.gemseconomy.commands;
 
-import com.taylorswiftcn.justwei.commands.ICommand;
+import com.taylorswiftcn.justwei.commands.JustCommand;
 import me.xanium.gemseconomy.commands.sub.PayCommand;
 
-public class PayMainCommand extends ICommand {
+public class PayMainCommand extends JustCommand {
 
     public PayMainCommand() {
-        this.setHelpCommand(new PayCommand());
+        super(new PayCommand());
     }
 }

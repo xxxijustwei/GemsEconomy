@@ -1,10 +1,10 @@
 package me.xanium.gemseconomy.commands.economy;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import com.taylorswiftcn.justwei.util.MegumiUtil;
 import me.xanium.gemseconomy.GemsEconomy;
 import me.xanium.gemseconomy.account.Account;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.file.Message;
 import org.bukkit.Bukkit;
@@ -20,28 +20,28 @@ public class SetCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
+    public void perform(CommandSender sender, String[] args) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            if (strings.length < 3) {
-                commandSender.sendMessage(Message.getSetUsage());
+            if (args.length < 3) {
+                sender.sendMessage(Message.getSetUsage());
                 return;
             }
-            String user = strings[1];
-            String s = strings[2];
+            String user = args[1];
+            String s = args[2];
 
             if (!MegumiUtil.isFloat(s)) {
-                commandSender.sendMessage(Message.getUnvalidAmount());
+                sender.sendMessage(Message.getUnvalidAmount());
                 return;
             }
 
             Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
 
-            if (strings.length > 3) {
-                currency = plugin.getCurrencyManager().getCurrency(strings[3]);
+            if (args.length > 3) {
+                currency = plugin.getCurrencyManager().getCurrency(args[3]);
             }
 
             if (currency == null) {
-                commandSender.sendMessage(Message.getUnknownCurrency());
+                sender.sendMessage(Message.getUnknownCurrency());
                 return;
             }
 
@@ -49,12 +49,12 @@ public class SetCommand extends SubCommand {
 
             Account account = plugin.getAccountManager().getAccount(user);
             if (account == null) {
-                commandSender.sendMessage(Message.getPlayerDoesNotExist());
+                sender.sendMessage(Message.getPlayerDoesNotExist());
                 return;
             }
 
             account.setBalance(currency, amount);
-            commandSender.sendMessage(Message.getSetMessage()
+            sender.sendMessage(Message.getSetMessage()
                     .replace("{player}", account.getNickname())
                     .replace("{currencycolor}", currency.getColor() + "")
                     .replace("{amount}", currency.format(amount)));
@@ -68,6 +68,6 @@ public class SetCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.ADMIN.name();
+        return CommandPerms.ADMIN.getNode();
     }
 }

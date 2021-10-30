@@ -1,8 +1,8 @@
 package me.xanium.gemseconomy.commands.currency;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.file.Message;
 import org.bukkit.command.CommandSender;
@@ -17,16 +17,16 @@ public class DefaultCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
-        if (strings.length < 2) {
-            commandSender.sendMessage(Message.getCurrencyUsage_Default());
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            sender.sendMessage(Message.getCurrencyUsage_Default());
             return;
         }
 
-        String s = strings[1];
+        String s = args[1];
         Currency currency = plugin.getCurrencyManager().getCurrency(s);
         if (currency == null) {
-            commandSender.sendMessage(Message.getUnknownCurrency());
+            sender.sendMessage(Message.getUnknownCurrency());
             return;
         }
 
@@ -37,7 +37,7 @@ public class DefaultCommand extends SubCommand {
         }
 
         currency.setDefaultCurrency(true);
-        commandSender.sendMessage(Message.getPrefix() + "§7Set default currency to §f" + currency.getIdentifier());
+        sender.sendMessage(Message.getPrefix() + "§7Set default currency to §f" + currency.getIdentifier());
         plugin.getDataStore().saveCurrency(currency);
     }
 
@@ -48,6 +48,6 @@ public class DefaultCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.ADMIN.name();
+        return CommandPerms.ADMIN.getNode();
     }
 }

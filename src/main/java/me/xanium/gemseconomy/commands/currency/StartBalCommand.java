@@ -1,8 +1,8 @@
 package me.xanium.gemseconomy.commands.currency;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.file.Message;
 import me.xanium.gemseconomy.utils.UtilString;
@@ -18,18 +18,18 @@ public class StartBalCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
-        if (strings.length < 3) {
-            commandSender.sendMessage(Message.getCurrencyUsage_Startbal());
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length < 3) {
+            sender.sendMessage(Message.getCurrencyUsage_Startbal());
             return;
         }
 
-        String s1 = strings[1];
-        String s2 = strings[2];
+        String s1 = args[1];
+        String s2 = args[2];
 
         Currency currency = plugin.getCurrencyManager().getCurrency(s1);
         if (currency == null) {
-            commandSender.sendMessage(Message.getUnknownCurrency());
+            sender.sendMessage(Message.getUnknownCurrency());
             return;
         }
 
@@ -41,7 +41,7 @@ public class StartBalCommand extends SubCommand {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
-                commandSender.sendMessage(Message.getUnvalidAmount());
+                sender.sendMessage(Message.getUnvalidAmount());
                 return;
             }
         }
@@ -52,13 +52,13 @@ public class StartBalCommand extends SubCommand {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException ex) {
-                commandSender.sendMessage(Message.getUnvalidAmount());
+                sender.sendMessage(Message.getUnvalidAmount());
                 return;
             }
         }
 
         currency.setDefaultBalance(amount);
-        commandSender.sendMessage(Message.getPrefix() + "§7Starting balance for §f" + currency.getIdentifier() + " §7set: §a" + UtilString.format(currency.getDefaultBalance()));
+        sender.sendMessage(Message.getPrefix() + "§7Starting balance for §f" + currency.getIdentifier() + " §7set: §a" + UtilString.format(currency.getDefaultBalance()));
         plugin.getDataStore().saveCurrency(currency);
     }
 
@@ -69,6 +69,6 @@ public class StartBalCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.ADMIN.name();
+        return CommandPerms.ADMIN.getNode();
     }
 }

@@ -1,9 +1,9 @@
 package me.xanium.gemseconomy.commands.sub;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
 import me.xanium.gemseconomy.account.Account;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.event.GemsPayEvent;
 import me.xanium.gemseconomy.file.Message;
@@ -22,8 +22,8 @@ public class PayCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender sender, String[] strings) {
-        if (strings.length < 2) {
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length < 2) {
             sender.sendMessage(Message.getPayUsage());
             return;
         }
@@ -34,12 +34,12 @@ public class PayCommand extends SubCommand {
         }
 
         Player player = getPlayer();
-        String s0 = strings[0];
-        String s1 = strings[1];
-        String s2 = strings[2];
+        String s0 = args[0];
+        String s1 = args[1];
+        String s2 = args[2];
 
         Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
-        if (strings.length == 3) {
+        if (args.length == 3) {
             currency = plugin.getCurrencyManager().getCurrency(s2);
         }
 
@@ -53,7 +53,7 @@ public class PayCommand extends SubCommand {
             return;
         }
 
-        if (!sender.hasPermission(PermissionType.PAY.name() + "." + currency.getIdentifier().toLowerCase()) && !sender.hasPermission(PermissionType.PAY.name() + "." + currency.getIdentifier().toLowerCase())) {
+        if (!sender.hasPermission(CommandPerms.PAY.getNode() + "." + currency.getIdentifier().toLowerCase()) && !sender.hasPermission(CommandPerms.PAY.name() + "." + currency.getIdentifier().toLowerCase())) {
             sender.sendMessage(Message.getPayNoPerms().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getIdentifier()));
             return;
         }
@@ -142,6 +142,6 @@ public class PayCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.PAY.name();
+        return CommandPerms.PAY.getNode();
     }
 }

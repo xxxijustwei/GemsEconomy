@@ -1,6 +1,6 @@
 package me.xanium.gemseconomy.commands;
 
-public enum PermissionType {
+public enum CommandPerms {
 
     ADMIN("economy.admin"),
     PAY("economy.pay"),
@@ -8,7 +8,11 @@ public enum PermissionType {
 
     private String node;
 
-    private PermissionType(String node) {
+    CommandPerms(String node) {
         this.node = node;
+    }
+
+    public String getNode() {
+        return node;
     }
 }
