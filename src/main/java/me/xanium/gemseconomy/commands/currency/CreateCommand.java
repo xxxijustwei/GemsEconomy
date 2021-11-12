@@ -17,13 +17,13 @@ public class CreateCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        if (args.length < 3) {
+        if (args.length < 2) {
             sender.sendMessage(Message.getCurrencyUsage_Create());
             return;
         }
 
-        String identifier = args[1];
-        String displayName = args[2];
+        String identifier = args[0];
+        String displayName = args[1];
         if (plugin.getCurrencyManager().currencyExist(identifier)) {
             sender.sendMessage(Message.getPrefix() + "§cCurrency already exists.");
             return;

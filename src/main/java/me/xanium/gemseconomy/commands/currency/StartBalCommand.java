@@ -19,13 +19,13 @@ public class StartBalCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        if (args.length < 3) {
+        if (args.length < 2) {
             sender.sendMessage(Message.getCurrencyUsage_Startbal());
             return;
         }
 
-        String s1 = args[1];
-        String s2 = args[2];
+        String s1 = args[0];
+        String s2 = args[1];
 
         Currency currency = plugin.getCurrencyManager().getCurrency(s1);
         if (currency == null) {

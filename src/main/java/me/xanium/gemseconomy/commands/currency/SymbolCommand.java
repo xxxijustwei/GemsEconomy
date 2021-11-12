@@ -18,13 +18,13 @@ public class SymbolCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        if (args.length < 3) {
+        if (args.length < 2) {
             sender.sendMessage(Message.getCurrencyUsage_Symbol());
             return;
         }
 
-        String s = args[1];
-        String symbol = args[2];
+        String s = args[0];
+        String symbol = args[1];
 
         Currency currency = plugin.getCurrencyManager().getCurrency(s);
         if (currency == null) {

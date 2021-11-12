@@ -18,12 +18,12 @@ public class DefaultCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        if (args.length < 2) {
+        if (args.length < 1) {
             sender.sendMessage(Message.getCurrencyUsage_Default());
             return;
         }
 
-        String s = args[1];
+        String s = args[0];
         Currency currency = plugin.getCurrencyManager().getCurrency(s);
         if (currency == null) {
             sender.sendMessage(Message.getUnknownCurrency());

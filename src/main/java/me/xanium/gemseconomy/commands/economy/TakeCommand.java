@@ -22,12 +22,12 @@ public class TakeCommand extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            if (args.length < 3) {
+            if (args.length < 2) {
                 sender.sendMessage(Message.getTakeUsage());
                 return;
             }
-            String user = args[1];
-            String s = args[2];
+            String user = args[0];
+            String s = args[1];
 
             if (!MegumiUtil.isFloat(s)) {
                 sender.sendMessage(Message.getUnvalidAmount());
@@ -36,8 +36,8 @@ public class TakeCommand extends SubCommand {
 
             Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
 
-            if (args.length > 3) {
-                currency = plugin.getCurrencyManager().getCurrency(args[3]);
+            if (args.length > 2) {
+                currency = plugin.getCurrencyManager().getCurrency(args[2]);
             }
 
             if (currency == null) {

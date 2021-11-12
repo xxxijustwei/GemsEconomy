@@ -19,13 +19,13 @@ public class ColorCommand extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        if (args.length < 3) {
+        if (args.length < 2) {
             sender.sendMessage(Message.getCurrencyUsage_Color());
             return;
         }
 
-        String s = args[1];
-        String colorID = args[2];
+        String s = args[0];
+        String colorID = args[1];
 
         Currency currency = plugin.getCurrencyManager().getCurrency(s);
         if (currency == null) {
