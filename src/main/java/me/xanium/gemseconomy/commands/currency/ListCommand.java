@@ -17,10 +17,10 @@ public class ListCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
-        commandSender.sendMessage(Message.getPrefix() + "§7There are §f" + plugin.getCurrencyManager().getCurrencies().size() + "§7 currencies.");
+    public void perform(CommandSender sender, String[] args) {
+        sender.sendMessage(Message.getPrefix() + "§7There are §f" + plugin.getCurrencyManager().getCurrencies().size() + "§7 currencies.");
         for (Currency currency : plugin.getCurrencyManager().getCurrencies()) {
-            commandSender.sendMessage("§a§l>> §e" + currency.getIdentifier());
+            sender.sendMessage("§a§l>> §e" + currency.getIdentifier());
         }
     }
 

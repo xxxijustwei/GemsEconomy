@@ -1,9 +1,9 @@
 package me.xanium.gemseconomy.commands.sub;
 
-import com.taylorswiftcn.justwei.commands.sub.SubCommand;
+import com.taylorswiftcn.justwei.commands.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
 import me.xanium.gemseconomy.account.Account;
-import me.xanium.gemseconomy.commands.CommandPerms;
+import me.xanium.gemseconomy.commands.PermissionType;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.event.GemsPayEvent;
 import me.xanium.gemseconomy.file.Message;
@@ -53,7 +53,7 @@ public class PayCommand extends SubCommand {
             return;
         }
 
-        if (!sender.hasPermission(CommandPerms.PAY.getNode() + "." + currency.getIdentifier().toLowerCase()) && !sender.hasPermission(CommandPerms.PAY.getNode() + "." + currency.getIdentifier().toLowerCase())) {
+        if (!sender.hasPermission(PermissionType.PAY.name() + "." + currency.getIdentifier().toLowerCase()) && !sender.hasPermission(PermissionType.PAY.name() + "." + currency.getIdentifier().toLowerCase())) {
             sender.sendMessage(Message.getPayNoPerms().replace("{currencycolor}", "" + currency.getColor()).replace("{currency}", currency.getIdentifier()));
             return;
         }
@@ -142,6 +142,6 @@ public class PayCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return CommandPerms.PAY.getNode();
+        return PermissionType.PAY.name();
     }
 }

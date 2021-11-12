@@ -20,17 +20,17 @@ public class BalanceCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
+    public void perform(CommandSender sender, String[] args) {
         SchedulerUtils.runAsync(() -> {
-            if (strings.length == 0 && commandSender instanceof Player) {
+            if (args.length == 0 && sender instanceof Player) {
                 Account account = plugin.getAccountManager().getAccount(getPlayer());
-                sendAccountInfo(commandSender, account);
+                sendAccountInfo(sender, account);
                 return;
             }
 
-            if (strings.length > 1) {
-                Account account = plugin.getAccountManager().getAccount(strings[0]);
-                sendAccountInfo(commandSender, account);
+            if (args.length > 1) {
+                Account account = plugin.getAccountManager().getAccount(args[0]);
+                sendAccountInfo(sender, account);
             }
         });
     }

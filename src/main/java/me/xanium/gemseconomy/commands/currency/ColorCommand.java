@@ -18,18 +18,18 @@ public class ColorCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
-        if (strings.length < 3) {
-            commandSender.sendMessage(Message.getCurrencyUsage_Color());
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length < 3) {
+            sender.sendMessage(Message.getCurrencyUsage_Color());
             return;
         }
 
-        String s = strings[1];
-        String colorID = strings[2];
+        String s = args[1];
+        String colorID = args[2];
 
         Currency currency = plugin.getCurrencyManager().getCurrency(s);
         if (currency == null) {
-            commandSender.sendMessage(Message.getUnknownCurrency());
+            sender.sendMessage(Message.getUnknownCurrency());
             return;
         }
 
@@ -39,10 +39,10 @@ public class ColorCommand extends SubCommand {
                 throw new Exception();
             }
             currency.setColor(color);
-            commandSender.sendMessage(Message.getPrefix() + "§7Color for §f" + currency.getIdentifier() + " §7updated: " + color + color.name());
+            sender.sendMessage(Message.getPrefix() + "§7Color for §f" + currency.getIdentifier() + " §7updated: " + color + color.name());
             plugin.getDataStore().saveCurrency(currency);
         } catch (Exception ex) {
-            commandSender.sendMessage(Message.getPrefix() + "§cInvalid chat color.");
+            sender.sendMessage(Message.getPrefix() + "§cInvalid chat color.");
         }
     }
 

@@ -17,21 +17,21 @@ public class PayableCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
-        if (strings.length < 2) {
-            commandSender.sendMessage(Message.getCurrencyUsage_Payable());
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            sender.sendMessage(Message.getCurrencyUsage_Payable());
             return;
         }
 
-        String s = strings[1];
+        String s = args[1];
         Currency currency = plugin.getCurrencyManager().getCurrency(s);
         if (currency == null) {
-            commandSender.sendMessage(Message.getUnknownCurrency());
+            sender.sendMessage(Message.getUnknownCurrency());
             return;
         }
 
         currency.setPayable(!currency.isPayable());
-        commandSender.sendMessage(Message.getPrefix() + "§7Toggled payability for §f" + currency.getIdentifier() + "§7: " + (currency.isPayable() ? "§aYes" : "§cNo"));
+        sender.sendMessage(Message.getPrefix() + "§7Toggled payability for §f" + currency.getIdentifier() + "§7: " + (currency.isPayable() ? "§aYes" : "§cNo"));
         plugin.getDataStore().saveCurrency(currency);
     }
 

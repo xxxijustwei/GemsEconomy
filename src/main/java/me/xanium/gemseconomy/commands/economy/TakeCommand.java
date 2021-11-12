@@ -20,28 +20,28 @@ public class TakeCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
+    public void perform(CommandSender sender, String[] args) {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            if (strings.length < 3) {
-                commandSender.sendMessage(Message.getTakeUsage());
+            if (args.length < 3) {
+                sender.sendMessage(Message.getTakeUsage());
                 return;
             }
-            String user = strings[1];
-            String s = strings[2];
+            String user = args[1];
+            String s = args[2];
 
             if (!MegumiUtil.isFloat(s)) {
-                commandSender.sendMessage(Message.getUnvalidAmount());
+                sender.sendMessage(Message.getUnvalidAmount());
                 return;
             }
 
             Currency currency = plugin.getCurrencyManager().getDefaultCurrency();
 
-            if (strings.length > 3) {
-                currency = plugin.getCurrencyManager().getCurrency(strings[3]);
+            if (args.length > 3) {
+                currency = plugin.getCurrencyManager().getCurrency(args[3]);
             }
 
             if (currency == null) {
-                commandSender.sendMessage(Message.getUnknownCurrency());
+                sender.sendMessage(Message.getUnknownCurrency());
                 return;
             }
 
@@ -49,17 +49,17 @@ public class TakeCommand extends SubCommand {
 
             Account account = plugin.getAccountManager().getAccount(user);
             if (account == null) {
-                commandSender.sendMessage(Message.getPlayerDoesNotExist());
+                sender.sendMessage(Message.getPlayerDoesNotExist());
                 return;
             }
 
             if (account.withdraw(currency, amount)) {
-                commandSender.sendMessage(Message.getTakeMessage()
+                sender.sendMessage(Message.getTakeMessage()
                         .replace("{player}", account.getNickname())
                         .replace("{currencycolor}", currency.getColor() + "")
                         .replace("{amount}", currency.format(amount)));
             } else {
-                commandSender.sendMessage(Message.getTargetInsufficientFunds()
+                sender.sendMessage(Message.getTargetInsufficientFunds()
                         .replace("{currencycolor}", currency.getColor() + "")
                         .replace("{currency}", currency.getIdentifier())
                         .replace("{target}", account.getDisplayName()));

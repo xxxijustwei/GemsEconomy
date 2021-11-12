@@ -12,8 +12,8 @@ public class HelpCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
-        Message.sendCurrencyUsage(commandSender);
+    public void perform(CommandSender sender, String[] args) {
+        Message.sendCurrencyUsage(sender);
     }
 
     @Override

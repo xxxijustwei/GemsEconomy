@@ -17,13 +17,13 @@ public class ViewCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender sender, String[] strings) {
-        if (strings.length < 2) {
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length < 2) {
             sender.sendMessage(Message.getCurrencyUsage_View());
             return;
         }
 
-        String identifier = strings[1];
+        String identifier = args[1];
         Currency currency = plugin.getCurrencyManager().getCurrency(identifier);
         if (currency == null) {
             sender.sendMessage(Message.getUnknownCurrency());

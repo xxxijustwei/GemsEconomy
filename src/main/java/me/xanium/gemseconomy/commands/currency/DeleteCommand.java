@@ -17,23 +17,23 @@ public class DeleteCommand extends SubCommand {
     }
 
     @Override
-    public void perform(CommandSender commandSender, String[] strings) {
-        if (strings.length < 2) {
-            commandSender.sendMessage(Message.getCurrencyUsage_Delete());
+    public void perform(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            sender.sendMessage(Message.getCurrencyUsage_Delete());
             return;
         }
 
-        String identifier = strings[1];
+        String identifier = args[1];
         Currency currency = plugin.getCurrencyManager().getCurrency(identifier);
         if (currency == null) {
-            commandSender.sendMessage(Message.getUnknownCurrency());
+            sender.sendMessage(Message.getUnknownCurrency());
             return;
         }
 
         plugin.getAccountManager().getAccounts().stream().filter(account -> account.getBalances().containsKey(currency)).forEach(account -> account.getBalances().remove(currency));
         plugin.getDataStore().deleteCurrency(currency);
         plugin.getCurrencyManager().getCurrencies().remove(currency);
-        commandSender.sendMessage(Message.getPrefix() + "§7Deleted currency: §a" + currency.getIdentifier());
+        sender.sendMessage(Message.getPrefix() + "§7Deleted currency: §a" + currency.getIdentifier());
     }
 
     @Override
