@@ -1,12 +1,12 @@
 package me.xanium.gemseconomy.commands;
 
-import com.taylorswiftcn.justwei.commands.ICommand;
+import com.taylorswiftcn.justwei.commands.JustCommand;
 import me.xanium.gemseconomy.commands.currency.*;
 
-public class CurrencyCommand extends ICommand {
+public class CurrencyCommand extends JustCommand {
 
     public CurrencyCommand() {
-        this.setHelpCommand(new HelpCommand());
+        super(new HelpCommand());
         this.register(new CreateCommand());
         this.register(new DeleteCommand());
         this.register(new ViewCommand());

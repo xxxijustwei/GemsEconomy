@@ -1,8 +1,8 @@
 package me.xanium.gemseconomy.commands.currency;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.file.Message;
 import org.bukkit.command.CommandSender;
@@ -55,6 +55,6 @@ public class SymbolCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.ADMIN.name();
+        return CommandPerms.ADMIN.getNode();
     }
 }

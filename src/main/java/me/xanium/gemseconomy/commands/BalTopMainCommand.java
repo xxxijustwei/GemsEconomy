@@ -20,13 +20,13 @@
  */
 package me.xanium.gemseconomy.commands;
 
-import com.taylorswiftcn.justwei.commands.ICommand;
+import com.taylorswiftcn.justwei.commands.JustCommand;
 import me.xanium.gemseconomy.commands.sub.BalanceTopCommand;
 
-public class BalTopMainCommand extends ICommand {
+public class BalTopMainCommand extends JustCommand {
 
     public BalTopMainCommand() {
-        this.setHelpCommand(new BalanceTopCommand());
+        super(new BalanceTopCommand());
     }
 }
 

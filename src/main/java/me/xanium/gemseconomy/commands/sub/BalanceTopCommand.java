@@ -1,8 +1,8 @@
 package me.xanium.gemseconomy.commands.sub;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
 import me.xanium.gemseconomy.GemsEconomy;
-import me.xanium.gemseconomy.commands.PermissionType;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.currency.CachedTopListEntry;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.file.Message;
@@ -85,6 +85,6 @@ public class BalanceTopCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.ADMIN.name();
+        return CommandPerms.ADMIN.getNode();
     }
 }

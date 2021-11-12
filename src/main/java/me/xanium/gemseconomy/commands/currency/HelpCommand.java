@@ -1,7 +1,7 @@
 package me.xanium.gemseconomy.commands.currency;
 
-import com.taylorswiftcn.justwei.commands.SubCommand;
-import me.xanium.gemseconomy.commands.PermissionType;
+import com.taylorswiftcn.justwei.commands.sub.SubCommand;
+import me.xanium.gemseconomy.commands.CommandPerms;
 import me.xanium.gemseconomy.file.Message;
 import org.bukkit.command.CommandSender;
 
@@ -23,6 +23,6 @@ public class HelpCommand extends SubCommand {
 
     @Override
     public String getPermission() {
-        return PermissionType.ADMIN.name();
+        return CommandPerms.ADMIN.getNode();
     }
 }
