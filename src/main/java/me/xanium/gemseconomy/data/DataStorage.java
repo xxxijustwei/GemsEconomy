@@ -10,7 +10,6 @@ package me.xanium.gemseconomy.data;
 
 import me.xanium.gemseconomy.GemsEconomy;
 import me.xanium.gemseconomy.account.Account;
-import me.xanium.gemseconomy.currency.CachedTopListEntry;
 import me.xanium.gemseconomy.currency.Currency;
 
 import java.util.ArrayList;
@@ -56,8 +55,6 @@ public abstract class DataStorage {
     public abstract void saveCurrency(Currency currency);
 
     public abstract void deleteCurrency(Currency currency);
-
-    public abstract void getTopList(Currency currency, int offset, int amount, Callback<LinkedList<CachedTopListEntry>> callback);
 
     public abstract Account loadAccount(String name);
 

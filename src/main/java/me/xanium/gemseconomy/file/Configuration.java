@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 public class Configuration {
 
-    private GemsEconomy plugin;
+    private final GemsEconomy plugin;
 
     public Configuration(GemsEconomy plugin) {
         this.plugin = plugin;
@@ -49,11 +49,8 @@ public class Configuration {
         config.addDefault(path + "nopermission", "&7You don't have permission to do this.");
         config.addDefault(path + "noconsole", "&7Console cannot do this.");
         config.addDefault(path + "invalidamount", "&7Not a valid amount.");
-        config.addDefault(path + "invalidpage", "&7Not a valid page number.");
         config.addDefault(path + "pay_yourself", "&7You can't pay yourself.");
         config.addDefault(path + "player_is_null", "&7The specified player does not exist.");
-        config.addDefault(path + "unknownCurrency", "&7Unknown Currency.");
-        config.addDefault(path + "unknownCommand", "&7Unknown sub-command.");
         config.addDefault(path + "noDefaultCurrency", "&7No default currency.");
         config.addDefault(path + "currencyExists", "&7Currency already exists.");
         config.addDefault(path + "accountMissing", "&7Your account is missing. Please relog the server.");
@@ -73,16 +70,6 @@ public class Configuration {
         config.addDefault(path + "balance.list", "&a&l>> {currencycolor}{format}");
         config.addDefault(path + "balance.none", "&7No balances to show for &c{player}&7.");
 
-        config.addDefault(path + "balance_top.balance", "&a&l-> {number}. {currencycolor}{player} &7- {currencycolor}{balance}");
-        config.addDefault(path + "balance_top.header", "&f----- {currencycolor} Top Balances for {currencyidentifier} &7(Page {page})&f -----");
-        config.addDefault(path + "balance_top.empty", "&7No accounts to display.");
-        config.addDefault(path + "balance_top.next", "{currencycolor}/gbaltop {currencyidentifier} {page} &7for more.");
-        config.addDefault(path + "balance_top.nosupport", "&a{storage} &7doesn't support /baltop.");
-
-        config.addDefault(path + "cheque.success", "&7Cheque successfully written.");
-        config.addDefault(path + "cheque.redeemed", "&7Cheque has been cashed in.");
-        config.addDefault(path + "cheque.invalid", "&7This is not a valid cheque.");
-
         config.addDefault(path + "help.eco_command", Arrays.asList(
                 "{prefix}&e&lEconomy Help",
                 "&2&l>> &a/eco give <user> <amount> [currency] &8- &7Give a player an amount of a currency.",
@@ -93,10 +80,6 @@ public class Configuration {
         config.addDefault(path + "usage.give_command", "&2&l>> &a/eco give <user> <amount> [currency] &8- &7Give a player an amount of a currency.");
         config.addDefault(path + "usage.take_command", "&2&l>> &a/eco take <user> <amount> [currency] &8- &7Take an amount of a currency from a player.");
         config.addDefault(path + "usage.set_command", "&2&l>> &a/eco set <user> <amount> [currency] &8- &7Set a players amount of a currency.");
-
-        config.addDefault(path + "help.cheque_command", Arrays.asList("{prefix}&e&lCheque Help",
-                "&2&l>> &a/cheque write <amount> [currency] &8- &7Write a cheque with a specified amount and currency.",
-                "&2&l>> &a/cheque redeem &8- &7Redeem the cheque."));
 
         config.addDefault(path + "help.currency_command", Arrays.asList("{prefix}&e&lCurrency Help",
                 "&2&l>> &a/currency create <identifier> <displayname> &8- &7Create a currency.",
@@ -115,10 +98,8 @@ public class Configuration {
         config.addDefault(path + "usage.currency_create", "&2&l>> &a/currency create <identifier> <displayname> &8- &7Create a currency.");
         config.addDefault(path + "usage.currency_delete", "&2&l>> &a/currency delete <identifier> &8- &7Delete a currency.");
         config.addDefault(path + "usage.currency_view", "&2&l>> &a/currency view <identifier> &8- &7View information about a currency.");
-        config.addDefault(path + "usage.currency_list", "&2&l>> &a/currency list &8- &7List of currencies.");
         config.addDefault(path + "usage.currency_symbol", "&2&l>> &a/currency symbol <identifier> <char|remove> &8- &7Select a symbol for a currency or remove it.");
         config.addDefault(path + "usage.currency_color", "&2&l>> &a/currency color <identifier> <color> &8- &7Select a color for a currency.");
-        config.addDefault(path + "usage.currency_colorlist", "&2&l>> &a/currency colorlist &8- &7List of Colors.");
         config.addDefault(path + "usage.currency_payable", "&2&l>> &a/currency payable <identifier> &8- &7Set a currency payable or not.");
         config.addDefault(path + "usage.currency_default", "&2&l>> &a/currency default <identifier> &8- &7Set a currency as default.");
         config.addDefault(path + "usage.currency_decimals", "&2&l>> &a/currency decimals <identifier> &8- &7Enable decimals for a currency.");

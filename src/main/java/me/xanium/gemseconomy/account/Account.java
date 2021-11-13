@@ -19,9 +19,9 @@ import java.util.*;
 
 public class Account {
 
-    private UUID uuid;
+    private final UUID uuid;
     private String nickname;
-    private Map<Currency, Double> balances;
+    private final Map<Currency, Double> balances;
     private boolean canReceiveCurrency = true;
 
     public Account(UUID uuid, String nickname) {

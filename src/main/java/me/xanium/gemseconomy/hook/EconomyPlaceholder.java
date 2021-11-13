@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class EconomyPlaceholder extends PlaceholderExpansion {
 
-    private GemsEconomyAPI api = new GemsEconomyAPI();
+    private final GemsEconomyAPI api = new GemsEconomyAPI();
 
     @Override
     public @NotNull String getIdentifier() {

@@ -41,14 +41,6 @@ public class Message {
         return colorize(cfg.getString("Messages.prefix"));
     }
 
-    public static String getNoPerms() {
-        return getPrefix() + colorize(cfg.getString("Messages.nopermission"));
-    }
-
-    public static String getNoConsole() {
-        return getPrefix() + colorize(cfg.getString("Messages.noconsole"));
-    }
-
     public static String getInsufficientFunds() { return getPrefix() + colorize(cfg.getString("Messages.insufficientFunds")); }
 
     public static String getTargetInsufficientFunds() { return getPrefix() + colorize(cfg.getString("Messages.targetInsufficientFunds")); }
@@ -85,10 +77,6 @@ public class Message {
 
     public static String getUnknownCurrency() { return getPrefix() + colorize(cfg.getString("Messages.unknownCurrency")); }
 
-    public static String getUnknownSubCommand() {
-        return getPrefix() + colorize(cfg.getString("Messages.unknownCommand"));
-    }
-
     public static void getManageHelp(CommandSender sender) {
         for (String s : cfg.getStringList("Messages.help.eco_command")) {
             sender.sendMessage(colorize(s.replace("{prefix}", getPrefix())));
@@ -106,9 +94,6 @@ public class Message {
     public static String getUnvalidAmount() {
         return getPrefix() + colorize(cfg.getString("Messages.invalidamount"));
     }
-    public static String getUnvalidPage() {
-        return getPrefix() + colorize(cfg.getString("Messages.invalidpage"));
-    }
 
     public static String getGiveUsage(){
         return colorize(cfg.getString("Messages.usage.give_command"));
@@ -122,32 +107,12 @@ public class Message {
         return colorize(cfg.getString("Messages.usage.set_command"));
     }
 
-    public static String getBalanceTopHeader(){
-        return colorize(cfg.getString("Messages.balance_top.header"));
-    }
-
-    public static String getBalanceTopEmpty(){
-        return colorize(cfg.getString("Messages.balance_top.empty"));
-    }
-
-    public static String getBalanceTopNext(){
-        return colorize(cfg.getString("Messages.balance_top.next"));
-    }
-
-    public static String getBalanceTop(){
-        return colorize(cfg.getString("Messages.balance_top.balance"));
-    }
-
     public static String getNoDefaultCurrency(){
         return getPrefix() + colorize(cfg.getString("Messages.noDefaultCurrency"));
     }
 
     public static String getBalanceNone(){
         return getPrefix() + colorize(cfg.getString("Messages.balance.none"));
-    }
-
-    public static String getBalanceTopNoSupport(){
-        return getPrefix() + colorize(cfg.getString("Messages.balance_top.nosupport"));
     }
 
     public static String getPayNoPerms(){
@@ -171,7 +136,6 @@ public class Message {
     public static String getCurrencyUsage_Delete() { return get("Messages.usage.currency_delete"); }
     public static String getCurrencyUsage_View() { return get("Messages.usage.currency_view"); }
     public static String getCurrencyUsage_Default() { return get("Messages.usage.currency_default"); }
-    public static String getCurrencyUsage_List() { return get("Messages.usage.currency_list"); }
     public static String getCurrencyUsage_Color() { return get("Messages.usage.currency_color"); }
     public static String getCurrencyUsage_Payable() { return get("Messages.usage.currency_payable"); }
     public static String getCurrencyUsage_Startbal() { return get("Messages.usage.currency_startbal"); }

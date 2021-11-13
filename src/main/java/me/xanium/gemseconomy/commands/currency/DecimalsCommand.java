@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 public class DecimalsCommand extends SubCommand {
 
-    private GemsEconomy plugin = GemsEconomy.getInstance();
+    private final GemsEconomy plugin = GemsEconomy.getInstance();
 
     @Override
     public String getIdentifier() {

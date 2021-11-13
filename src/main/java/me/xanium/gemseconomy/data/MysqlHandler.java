@@ -1,8 +1,6 @@
 package me.xanium.gemseconomy.data;
 
 import me.xanium.gemseconomy.account.Account;
-import me.xanium.gemseconomy.currency.CachedTopList;
-import me.xanium.gemseconomy.currency.CachedTopListEntry;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.data.mysql.EconomyTables;
 import me.xanium.gemseconomy.utils.SchedulerUtils;
@@ -19,12 +17,10 @@ import java.util.*;
 public class MysqlHandler extends DataStorage {
 
     private final DataManager dataManager;
-    private final HashMap<UUID, CachedTopList> topList;
 
     public MysqlHandler() {
         super("MySQL", true);
         this.dataManager = ClientManagerAPI.getDataManager();
-        this.topList = new HashMap<>();
     }
 
     @Override
@@ -138,97 +134,56 @@ public class MysqlHandler extends DataStorage {
     }
 
     @Override
-    public void getTopList(Currency currency, int offset, int amount, Callback<LinkedList<CachedTopListEntry>> callback) {
-        CachedTopList cache = topList.get(currency.getUUID());
-        if (cache != null && !cache.isExpired()) {
-            LinkedList<CachedTopListEntry> result = new LinkedList<>();
-            int collected = 0;
-            for(int i = offset; i < cache.getResults().size(); i++){
-                if(collected == amount) break;
-                result.add(cache.getResults().get(i));
-                collected++;
-            }
-            SchedulerUtils.run(() -> callback.call(result));
-        }
-
-        SchedulerUtils.runAsync(() -> {
-            LinkedList<CachedTopListEntry> entries = new LinkedList<>();
-            try (DatabaseQuery query = dataManager.createQuery(
-                    String.format(
-                            "SELECT * FROM %s WHERE currency = '%s' ORDER BY balance DESC LIMIT %s, %s",
-                            EconomyTables.ECONOMY_ACCOUNT.getTableName(),
-                            currency.getUUID().toString(),
-                            offset,
-                            offset + amount
-                    )
-            )) {
-                ResultSet result = query.getResultSet();
-                while (result.next()) {
-                    String playerName = result.getString("player");
-                    double balance = result.getDouble("balance");
-                    entries.add(new CachedTopListEntry(playerName, balance));
-                }
-
-                SchedulerUtils.run(() -> callback.call(entries));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    @Override
     public Account loadAccount(String name) {
-        Account account = null;
-        try (DatabaseQuery query = dataManager.createQuery(EconomyTables.ECONOMY_ACCOUNT.getTableName(), "player", name)) {
+        int uid = ClientManagerAPI.getUserID(name);
+
+        UUID uuid = ClientManagerAPI.getUserUUID(uid);
+        Account account = new Account(uuid, name);
+
+        try (DatabaseQuery query = dataManager.createQuery(EconomyTables.ECONOMY_ACCOUNT.getTableName(), "uid", uid)) {
             ResultSet result = query.getResultSet();
             while (result.next()) {
-                UUID uuid = UUID.fromString(result.getString("uuid"));
                 UUID currencyUUID = UUID.fromString(result.getString("currency"));
                 double balance = result.getDouble("balance");
-
-                if (account == null) account = new Account(uuid, name);
 
                 Currency currency = plugin.getCurrencyManager().getCurrency(currencyUUID);
                 if (currency == null) continue;
 
                 account.getBalances().put(currency, balance);
             }
-
-            if (account != null) {
-                account.initBalance();
-            }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+
+        account.initBalance();
         return account;
     }
 
     @Override
     public Account loadAccount(UUID uuid) {
-        Account account = null;
-        try (DatabaseQuery query = dataManager.createQuery(EconomyTables.ECONOMY_ACCOUNT.getTableName(), "uuid", uuid.toString())) {
+        int uid = ClientManagerAPI.getUserID(uuid);
+
+        String name = ClientManagerAPI.getUserName(uid);
+        Account account = new Account(uuid, name);
+
+        try (DatabaseQuery query = dataManager.createQuery(EconomyTables.ECONOMY_ACCOUNT.getTableName(), "uid", uid)) {
             ResultSet result = query.getResultSet();
             while (result.next()) {
-                String name = result.getString("player");
                 UUID currencyUUID = UUID.fromString(result.getString("currency"));
                 double balance = result.getDouble("balance");
-
-                if (account == null) account = new Account(uuid, name);
 
                 Currency currency = plugin.getCurrencyManager().getCurrency(currencyUUID);
                 if (currency == null) continue;
 
                 account.getBalances().put(currency, balance);
             }
-
-            if (account != null) {
-                account.initBalance();
-            }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+
+        account.initBalance();
         return account;
     }
 
@@ -250,13 +205,14 @@ public class MysqlHandler extends DataStorage {
 
     @Override
     public void saveAccount(Account account) {
+        int uid = ClientManagerAPI.getUserID(account.getUUID());
+
         List<Object[]> datum = new ArrayList<>();
         for (Currency currency : account.getBalances().keySet()) {
             UUID cid = currency.getUUID();
             double balance = account.getBalance(currency);
             datum.add(new Object[] {
-                    account.getUUID().toString(),
-                    account.getNickname(),
+                    uid,
                     cid.toString(),
                     balance
             });
@@ -265,8 +221,7 @@ public class MysqlHandler extends DataStorage {
         dataManager.executeReplace(
                 EconomyTables.ECONOMY_ACCOUNT.getTableName(),
                 new String[] {
-                        "uuid",
-                        "player",
+                        "uid",
                         "currency",
                         "balance"
                 },
@@ -276,23 +231,25 @@ public class MysqlHandler extends DataStorage {
 
     @Override
     public void deleteAccount(Account account) {
+        int uid = ClientManagerAPI.getUserID(account.getUUID());
         dataManager.executeDelete(
                 EconomyTables.ECONOMY_ACCOUNT.getTableName(),
-                "uuid",
-                account.getUUID().toString()
+                "uid",
+                uid
         );
     }
 
     @Override
     public void createAccount(Account account) {
+        int uid = ClientManagerAPI.getUserID(account.getUUID());
+
         Object[][] datum = new Object[plugin.getCurrencyManager().getCurrencies().size()][];
         int i = 0;
         for (Currency currency : plugin.getCurrencyManager().getCurrencies()) {
             UUID cid = currency.getUUID();
             double balance = account.getBalance(currency);
             datum[i] = new Object[] {
-                    account.getUUID().toString(),
-                    account.getNickname(),
+                    uid,
                     cid.toString(),
                     balance
             };
@@ -302,8 +259,7 @@ public class MysqlHandler extends DataStorage {
         dataManager.executeInsert(
                 EconomyTables.ECONOMY_ACCOUNT.getTableName(),
                 new String[] {
-                        "uuid",
-                        "player",
+                        "uid",
                         "currency",
                         "balance"
                 },
@@ -313,12 +269,13 @@ public class MysqlHandler extends DataStorage {
 
     @Override
     public void addAccountCurrencies(UUID uuid, String name, List<Currency> currencies) {
+        int uid = ClientManagerAPI.getUserID(uuid);
+
         Object[][] datum = new Object[currencies.size()][];
         int i = 0;
         for (Currency currency : currencies) {
             datum[i] = new Object[] {
-                    uuid.toString(),
-                    name,
+                    uid,
                     currency.getUUID().toString(),
                     currency.getDefaultBalance()
             };
@@ -328,8 +285,7 @@ public class MysqlHandler extends DataStorage {
         dataManager.executeInsert(
                 EconomyTables.ECONOMY_ACCOUNT.getTableName(),
                 new String[] {
-                        "uuid",
-                        "player",
+                        "uid",
                         "currency",
                         "balance"
                 },

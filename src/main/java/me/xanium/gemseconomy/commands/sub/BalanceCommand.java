@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class BalanceCommand extends SubCommand {
 
-    private GemsEconomy plugin = GemsEconomy.getInstance();
+    private final GemsEconomy plugin = GemsEconomy.getInstance();
 
     @Override
     public String getIdentifier() {

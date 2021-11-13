@@ -1,12 +1,8 @@
 name: GemsEconomy
 main: me.xanium.gemseconomy.GemsEconomy
 version: ${project.version}
-author: Xanium
+author: [Xanium, justwei]
 description: A multi-currency economy plugin for spigot servers!
-website: https://www.spigotmc.org/resources/gemseconomy.19655/
-load: STARTUP
-loadbefore:
-  - ItemFrameShops
 depend:
   - MegumiLib
   - DataManager
@@ -17,9 +13,6 @@ commands:
   balance:
     description: Shows your balances
     aliases: [gbal, gmoney, bal, money]
-  baltop:
-    description: Shows the top balances of the server
-    aliases: [gmoneytop, gecotop, gtop, gbaltop]
   currency:
     description: Manage the currencies.
     aliases: [gcurr, gemscurrencies, gcurrency, currencies]

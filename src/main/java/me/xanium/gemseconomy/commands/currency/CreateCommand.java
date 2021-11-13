@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public class CreateCommand extends SubCommand {
 
-    private GemsEconomy plugin = GemsEconomy.getInstance();
+    private final GemsEconomy plugin = GemsEconomy.getInstance();
 
     @Override
     public String getIdentifier() {

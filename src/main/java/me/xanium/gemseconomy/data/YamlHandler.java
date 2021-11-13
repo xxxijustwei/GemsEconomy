@@ -8,7 +8,6 @@
 package me.xanium.gemseconomy.data;
 
 import me.xanium.gemseconomy.account.Account;
-import me.xanium.gemseconomy.currency.CachedTopListEntry;
 import me.xanium.gemseconomy.currency.Currency;
 import me.xanium.gemseconomy.utils.SchedulerUtils;
 import me.xanium.gemseconomy.utils.UtilServer;
@@ -105,11 +104,6 @@ public class YamlHandler extends DataStorage {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void getTopList(Currency currency, int offset, int amount, Callback<LinkedList<CachedTopListEntry>> callback) {
-        throw new UnsupportedOperationException("YAML does not support Top Lists!");
     }
 
     private void loadBalances(Account account) {
