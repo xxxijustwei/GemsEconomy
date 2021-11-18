@@ -4,11 +4,10 @@ version: ${project.version}
 author: [Xanium, justwei]
 description: A multi-currency economy plugin for spigot servers!
 depend:
+  - Vault
   - MegumiLib
   - DataManager
   - PlaceholderAPI
-softdepend:
-  - Vault
 commands:
   balance:
     description: Shows your balances

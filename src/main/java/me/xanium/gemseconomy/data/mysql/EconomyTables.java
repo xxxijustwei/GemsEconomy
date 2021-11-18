@@ -7,7 +7,7 @@ public enum EconomyTables {
                     "`uid` int NOT NULL",
                     "`currency` varchar(36) NOT NULL",
                     "`balance` decimal(19,10) default 0",
-                    "UNIQUE KEY `account` (`uuid`, `currency`)"
+                    "UNIQUE KEY `account` (`uid`, `currency`)"
             }
     )),
 
