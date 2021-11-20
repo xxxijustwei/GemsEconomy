@@ -242,6 +242,7 @@ public class MysqlHandler extends DataStorage {
     @Override
     public void createAccount(Account account) {
         int uid = ClientManagerAPI.getUserID(account.getUUID());
+        if (uid == -1) return;
 
         Object[][] datum = new Object[plugin.getCurrencyManager().getCurrencies().size()][];
         int i = 0;
@@ -270,6 +271,7 @@ public class MysqlHandler extends DataStorage {
     @Override
     public void addAccountCurrencies(UUID uuid, String name, List<Currency> currencies) {
         int uid = ClientManagerAPI.getUserID(uuid);
+        if (uid == -1) return;
 
         Object[][] datum = new Object[currencies.size()][];
         int i = 0;
