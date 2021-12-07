@@ -28,7 +28,7 @@ public class BalanceCommand extends SubCommand {
                 return;
             }
 
-            if (args.length > 1) {
+            if (args.length > 0) {
                 Account account = plugin.getAccountManager().getAccount(args[0]);
                 sendAccountInfo(sender, account);
             }

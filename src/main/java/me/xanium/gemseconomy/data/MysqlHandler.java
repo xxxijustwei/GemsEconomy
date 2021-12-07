@@ -136,6 +136,7 @@ public class MysqlHandler extends DataStorage {
     @Override
     public Account loadAccount(String name) {
         int uid = ClientManagerAPI.getUserID(name);
+        if (uid == -1) return null;
 
         UUID uuid = ClientManagerAPI.getUserUUID(uid);
         Account account = new Account(uuid, name);
