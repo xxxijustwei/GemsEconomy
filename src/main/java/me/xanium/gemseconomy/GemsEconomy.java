@@ -42,33 +42,6 @@ public class GemsEconomy extends JavaPlugin {
 
     private boolean disabling = false;
 
-    /**
-     * Bug fix Update
-     *
-     * MySQL would not write or read any data from database - Fixed (Some help from @FurryKitten @ github)
-     * Rewritten many parts of loading / saving account data in MySQL.
-     * YAML Storage would cache offline users when adding currency to them - Fixed
-     * Balance Top command has been rewritten to support more efficient SQL queries.
-     * Balance Top cache expiry lowered to 3 minutes from 5.
-     * Added an option to enable/disable cheques in config.
-     * There has also been many internal changes here and there.
-     *
-     * SQLITE Support has been dropped! IF this is relevant for you!
-     * Please change your backend to YAML with the command /currency convert yaml
-     *
-     * THIS UPDATE MODIFIES HOW A PLAYERS BALANCE IS SAVED, ONLY RELEVANT FOR MYSQL USERS!
-     * Please take a backup of your balances & accounts table before you start your server
-     * with this new version of GemsEconomy!
-     * The plugin will automatically alter the old table and add the new column.
-     * When players log in their data will be converted to the new format.
-     * IF you are using mysql, and utilize /baltop command a lot, the baltop might become
-     * inaccurate due to the players need to log on your server before it can read their balances.
-     *
-     * Please let me know if you find bugs!
-     * PM me here @ SpigotMC
-     *
-     */
-
     @Override
     public void onLoad() {
         Configuration configuration = new Configuration(this);
@@ -128,9 +101,6 @@ public class GemsEconomy extends JavaPlugin {
         DataStorage.getMethods().add(new YamlHandler(new File(getDataFolder(), "data.yml")));
         DataStorage.getMethods().add(new MysqlHandler());
 
-        // Disabled. Not many are using SQLite anyway. And MySQL has much better performance!
-        //DataStorage.getMethods().add(new SQLiteStorage(new File(getDataFolder(), getConfig().getString("sqlite.file"))));
-
         if (strategy != null) {
             dataStorage = DataStorage.getMethod(strategy);
         } else {
@@ -147,6 +117,7 @@ public class GemsEconomy extends JavaPlugin {
             if (load) {
                 UtilServer.consoleLog("Loading currencies...");
                 getDataStore().loadCurrencies();
+                currencyManager.initDefaultCurrency();
                 UtilServer.consoleLog("Loaded " + getCurrencyManager().getCurrencies().size() + " currencies!");
             }
         } catch (Throwable e) {
@@ -163,10 +134,6 @@ public class GemsEconomy extends JavaPlugin {
 
     public static GemsEconomy getInstance() {
         return instance;
-    }
-
-    public CurrencyManager getCurrencyManager() {
-        return currencyManager;
     }
 
     public AccountManager getAccountManager() {
@@ -211,5 +178,9 @@ public class GemsEconomy extends JavaPlugin {
 
     public UpdateForwarder getUpdateForwarder() {
         return updateForwarder;
+    }
+
+    public static CurrencyManager getCurrencyManager() {
+        return instance.currencyManager;
     }
 }

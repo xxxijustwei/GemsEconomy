@@ -16,6 +16,12 @@ public class CurrencyManager {
 
     private final List<Currency> currencies = Lists.newArrayList();
 
+    public void initDefaultCurrency() {
+        for (EternalCurrency currency : EternalCurrency.values()) {
+            currency.create();
+        }
+    }
+
     public boolean currencyExist(String identifier) {
         for(Currency currency : currencies) {
             if(currency.getIdentifier().equals(identifier)){
@@ -51,12 +57,16 @@ public class CurrencyManager {
     }
 
     public void createNewCurrency(String identifier, String displayName){
+        createNewCurrency(identifier, displayName, false);
+    }
+
+    public void createNewCurrency(String identifier, String displayName, boolean def){
         if(currencyExist(identifier)) {
             return;
         }
 
         Currency currency = new Currency(UUID.randomUUID(), identifier, displayName);
-        if(currencies.size() == 0) {
+        if(currencies.size() == 0 || def) {
             currency.setDefaultCurrency(true);
         }
 
