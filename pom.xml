@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.xanium</groupId>
+    <groupId>net.sakuragame</groupId>
     <artifactId>GemsEconomy</artifactId>
-    <version>4.9.3-SNAPSHOT</version>
+    <version>4.9.4-SNAPSHOT</version>
 
     <build>
         <defaultGoal>package</defaultGoal>
