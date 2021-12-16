@@ -93,11 +93,11 @@ public class GemsEconomyAPI {
         return acc.getBalance(GemsEconomy.getCurrencyManager().getDefaultCurrency());
     }
 
-    public static void getBalance(UUID uuid, EternalCurrency eCurrency) {
+    public static double getBalance(UUID uuid, EternalCurrency eCurrency) {
         Currency currency = eCurrency.getCurrency();
-        if (currency == null) return;
+        if (currency == null) return 0;
 
-        getBalance(uuid, currency);
+        return getBalance(uuid, currency);
     }
 
     /**
