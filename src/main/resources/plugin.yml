@@ -1,5 +1,5 @@
 name: GemsEconomy
-main: me.xanium.gemseconomy.GemsEconomy
+main: net.sakuragame.eternal.gemseconomy.GemsEconomy
 version: ${project.version}
 author: [Xanium, justwei]
 description: A multi-currency economy plugin for spigot servers!
