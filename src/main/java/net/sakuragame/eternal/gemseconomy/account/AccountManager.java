@@ -9,6 +9,7 @@
 package net.sakuragame.eternal.gemseconomy.account;
 
 import net.sakuragame.eternal.gemseconomy.GemsEconomy;
+import net.sakuragame.eternal.gemseconomy.currency.Currency;
 import net.sakuragame.eternal.gemseconomy.storage.Callback;
 import net.sakuragame.eternal.gemseconomy.utils.SchedulerUtils;
 import net.sakuragame.eternal.gemseconomy.utils.UtilServer;
@@ -96,6 +97,10 @@ public class AccountManager {
 
     public List<Account> getAccounts() {
         return accounts;
+    }
+
+    public void addEconomyLogger(UUID uuid, Currency currency, double amount, String content) {
+        SchedulerUtils.runAsync(() -> plugin.getDataStore().insertLogger(uuid, currency, amount, content));
     }
 }
 

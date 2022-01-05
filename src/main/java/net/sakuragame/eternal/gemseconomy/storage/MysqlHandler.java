@@ -19,7 +19,7 @@ public class MysqlHandler extends DataStorage {
     private final DataManager dataManager;
 
     public MysqlHandler() {
-        super("MySQL", true);
+        super("MySQL");
         this.dataManager = ClientManagerAPI.getDataManager();
     }
 
@@ -28,6 +28,8 @@ public class MysqlHandler extends DataStorage {
         for (EconomyTables table : EconomyTables.values()) {
             table.createTable();
         }
+
+        clearLogger(180);
     }
 
     @Override
@@ -312,5 +314,26 @@ public class MysqlHandler extends DataStorage {
                 },
                 datum
         );
+    }
+
+    @Override
+    public void insertLogger(UUID uuid, Currency currency, double amount, String content) {
+        int uid = ClientManagerAPI.getUserID(uuid);
+        if (uid == -1) return;
+
+        dataManager.executeInsert(
+                EconomyTables.ECONOMY_LOGGER.getTableName(),
+                new String[] {"uid", "identifier", "change", "content"},
+                new Object[] {uuid.toString(), currency.getIdentifier(), amount, content}
+        );
+    }
+
+    @Override
+    public void clearLogger(int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, day * -1);
+        String delete = "DELETE FROM %s WHERE record <= '%s'";
+
+        dataManager.executeSQL(String.format(delete, EconomyTables.ECONOMY_LOGGER.getTableName(), calendar.getTimeInMillis()));
     }
 }

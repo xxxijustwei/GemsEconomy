@@ -44,6 +44,10 @@ public class Account {
     }
 
     public boolean withdraw(Currency currency, double amount) {
+        return withdraw(currency, amount, null);
+    }
+
+    public boolean withdraw(Currency currency, double amount, String loggerContent) {
         if (!currency.isDecimalSupported()) {
             amount = (int) amount;
         }
@@ -54,13 +58,21 @@ public class Account {
 
             double finalAmount = getBalance(currency) - amount;
             this.modifyBalance(currency, finalAmount);
-            GemsEconomy.getInstance().getEconomyLogger().log("[WITHDRAW] Account: " + getDisplayName() + " were withdrawn: " + currency.format(amount) + " and now has " + currency.format(finalAmount));
+
+            if (loggerContent != null) {
+                GemsEconomy.getInstance().getAccountManager().addEconomyLogger(uuid, currency, amount * -1, loggerContent);
+            }
+
             return true;
         }
         return false;
     }
 
     public boolean deposit(Currency currency, double amount) {
+        return deposit(currency, amount, null);
+    }
+
+    public boolean deposit(Currency currency, double amount, String loggerContent) {
         if (!currency.isDecimalSupported()) {
             amount = (int) amount;
         }
@@ -71,7 +83,11 @@ public class Account {
 
             double finalAmount = getBalance(currency) + amount;
             this.modifyBalance(currency, finalAmount);
-            GemsEconomy.getInstance().getEconomyLogger().log("[DEPOSIT] Account: " + getDisplayName() + " were deposited: " + currency.format(amount) + " and now has " + currency.format(finalAmount));
+
+            if (loggerContent != null) {
+                GemsEconomy.getInstance().getAccountManager().addEconomyLogger(uuid, currency, amount, loggerContent);
+            }
+
             return true;
         }
         return false;

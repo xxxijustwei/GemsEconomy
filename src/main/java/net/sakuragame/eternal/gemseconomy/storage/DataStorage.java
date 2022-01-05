@@ -12,7 +12,6 @@ import net.sakuragame.eternal.gemseconomy.GemsEconomy;
 import net.sakuragame.eternal.gemseconomy.account.Account;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,11 +20,9 @@ public abstract class DataStorage {
     public final GemsEconomy plugin = GemsEconomy.getInstance();
 
     private final String name;
-    private final boolean topSupported;
 
-    public DataStorage(String name, boolean topSupported) {
+    public DataStorage(String name) {
         this.name = name;
-        this.topSupported = topSupported;
     }
 
     public abstract void initialize();
@@ -58,12 +55,12 @@ public abstract class DataStorage {
 
     public abstract void addAccountCurrencies(UUID uuid, String name, List<Currency> currencies);
 
+    public abstract void insertLogger(UUID uuid, Currency currency, double amount, String content);
+
+    public abstract void clearLogger(int day);
+
     public String getName() {
         return this.name;
-    }
-
-    public boolean isTopSupported() {
-        return this.topSupported;
     }
 }
 

@@ -18,7 +18,6 @@ import net.sakuragame.eternal.gemseconomy.currency.CurrencyManager;
 import net.sakuragame.eternal.gemseconomy.file.Configuration;
 import net.sakuragame.eternal.gemseconomy.hook.EconomyPlaceholder;
 import net.sakuragame.eternal.gemseconomy.listeners.EconomyListener;
-import net.sakuragame.eternal.gemseconomy.logging.EconomyLogger;
 import net.sakuragame.eternal.gemseconomy.storage.DataStorage;
 import net.sakuragame.eternal.gemseconomy.storage.MysqlHandler;
 import net.sakuragame.eternal.gemseconomy.utils.UtilServer;
@@ -33,12 +32,10 @@ public class GemsEconomy extends JavaPlugin {
     private AccountManager accountManager;
     private CurrencyManager currencyManager;
     private VaultHandler vaultHandler;
-    private EconomyLogger economyLogger;
     private UpdateForwarder updateForwarder;
 
     private boolean debug = false;
     private boolean vault = false;
-    private boolean logging = false;
 
     private boolean disabling = false;
 
@@ -49,7 +46,6 @@ public class GemsEconomy extends JavaPlugin {
 
         setDebug(getConfig().getBoolean("debug"));
         setVault(getConfig().getBoolean("vault"));
-        setLogging(getConfig().getBoolean("transaction_log"));
     }
 
     @Override
@@ -57,7 +53,6 @@ public class GemsEconomy extends JavaPlugin {
         instance = this;
         accountManager = new AccountManager(this);
         currencyManager = new CurrencyManager(this);
-        economyLogger = new EconomyLogger(this);
         updateForwarder = new UpdateForwarder(this);
 
         initializeDataStore(true);
@@ -75,10 +70,6 @@ public class GemsEconomy extends JavaPlugin {
             vaultHandler.hook();
         } else {
             UtilServer.consoleLog("Vault link is disabled.");
-        }
-
-        if (isLogging()) {
-            getEconomyLogger().save();
         }
     }
 
@@ -130,10 +121,6 @@ public class GemsEconomy extends JavaPlugin {
         return vaultHandler;
     }
 
-    public EconomyLogger getEconomyLogger() {
-        return economyLogger;
-    }
-
     public boolean isDebug() {
         return debug;
     }
@@ -148,14 +135,6 @@ public class GemsEconomy extends JavaPlugin {
 
     private void setVault(boolean vault) {
         this.vault = vault;
-    }
-
-    public boolean isLogging() {
-        return logging;
-    }
-
-    public void setLogging(boolean logging) {
-        this.logging = logging;
     }
 
     public boolean isDisabling() {

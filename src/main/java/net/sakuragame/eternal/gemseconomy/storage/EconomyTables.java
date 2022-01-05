@@ -6,7 +6,7 @@ public enum EconomyTables {
             new String[] {
                     "`uid` int NOT NULL",
                     "`currency` varchar(36) NOT NULL",
-                    "`balance` decimal(19,10) default 0",
+                    "`balance` decimal(19,2) default 0",
                     "UNIQUE KEY `account` (`uid`, `currency`)"
             }
     )),
@@ -16,12 +16,23 @@ public enum EconomyTables {
                     "`uuid` varchar(36) NOT NULL PRIMARY KEY",
                     "`identifier` varchar(16) NOT NULL",
                     "`displayname` varchar(16) NOT NULL",
-                    "`default_balance` decimal(19,4) default 0",
+                    "`default_balance` decimal(19,2) default 0",
                     "`symbol` varchar(8)",
                     "`is_decimals` int",
                     "`is_default` int",
                     "`payable` int",
                     "`color` varchar(32)"
+            }
+    )),
+
+    ECONOMY_LOGGER(new DatabaseTable("economy_logger",
+            new String[] {
+                    "`id` int NOT NULL PRIMARY KEY AUTO_INCREMENT",
+                    "`uid` int NOT NULL",
+                    "`record` timestamp DEFAULT CURRENT_TIMESTAMP",
+                    "`identifier` varchar(36) NOT NULL",
+                    "`change` decimal(19,2) NOT NULL",
+                    "`content` VARCHAR(128) NOT NULL"
             }
     ));
 
