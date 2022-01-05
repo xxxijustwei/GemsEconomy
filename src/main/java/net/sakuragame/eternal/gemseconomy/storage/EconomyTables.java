@@ -1,4 +1,4 @@
-package net.sakuragame.eternal.gemseconomy.data.mysql;
+package net.sakuragame.eternal.gemseconomy.storage;
 
 public enum EconomyTables {
 

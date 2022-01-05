@@ -29,6 +29,13 @@ public class GemsEconomyAPI {
         acc.deposit(GemsEconomy.getCurrencyManager().getDefaultCurrency(), amount);
     }
 
+
+    /**
+     *
+     * @param uuid - The users unique ID.
+     * @param amount - An amount of a currency, if the currency is null, the default will be used.
+     * @param eCurrency - A eternal-land currency.
+     */
     public static void deposit(UUID uuid, double amount, EternalCurrency eCurrency) {
         Currency currency = eCurrency.getCurrency();
         if (currency == null) return;

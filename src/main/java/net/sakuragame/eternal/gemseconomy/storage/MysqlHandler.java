@@ -1,9 +1,8 @@
-package net.sakuragame.eternal.gemseconomy.data;
+package net.sakuragame.eternal.gemseconomy.storage;
 
 import net.sakuragame.eternal.gemseconomy.GemsEconomy;
 import net.sakuragame.eternal.gemseconomy.account.Account;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
-import net.sakuragame.eternal.gemseconomy.data.mysql.EconomyTables;
 import net.sakuragame.eternal.gemseconomy.utils.SchedulerUtils;
 import net.sakuragame.eternal.gemseconomy.utils.UtilServer;
 import net.sakuragame.serversystems.manage.api.database.DataManager;

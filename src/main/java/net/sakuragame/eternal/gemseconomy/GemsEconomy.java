@@ -12,9 +12,8 @@ import net.sakuragame.eternal.gemseconomy.account.AccountManager;
 import net.sakuragame.eternal.gemseconomy.bungee.UpdateForwarder;
 import net.sakuragame.eternal.gemseconomy.commands.CurrencyCommand;
 import net.sakuragame.eternal.gemseconomy.currency.CurrencyManager;
-import net.sakuragame.eternal.gemseconomy.data.DataStorage;
-import net.sakuragame.eternal.gemseconomy.data.MysqlHandler;
-import net.sakuragame.eternal.gemseconomy.data.YamlHandler;
+import net.sakuragame.eternal.gemseconomy.storage.DataStorage;
+import net.sakuragame.eternal.gemseconomy.storage.MysqlHandler;
 import net.sakuragame.eternal.gemseconomy.file.Configuration;
 import net.sakuragame.eternal.gemseconomy.hook.EconomyPlaceholder;
 import net.sakuragame.eternal.gemseconomy.listeners.EconomyListener;
@@ -63,7 +62,7 @@ public class GemsEconomy extends JavaPlugin {
         economyLogger = new EconomyLogger(this);
         updateForwarder = new UpdateForwarder(this);
 
-        initializeDataStore(getConfig().getString("storage"), true);
+        initializeDataStore(true);
 
         getServer().getPluginManager().registerEvents(new EconomyListener(), this);
         getCommand("balance").setExecutor(new BalanceMainCommand());
@@ -99,19 +98,8 @@ public class GemsEconomy extends JavaPlugin {
         }
     }
 
-    public void initializeDataStore(String strategy, boolean load) {
-
-        DataStorage.getMethods().add(new YamlHandler(new File(getDataFolder(), "data.yml")));
-        DataStorage.getMethods().add(new MysqlHandler());
-
-        if (strategy != null) {
-            dataStorage = DataStorage.getMethod(strategy);
-        } else {
-            UtilServer.consoleLog("§cNo valid storage method provided.");
-            UtilServer.consoleLog("§cCheck your files, then try again.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
+    public void initializeDataStore(boolean load) {
+        dataStorage = new MysqlHandler();
 
         try {
             UtilServer.consoleLog("Initializing data store \"" + getDataStore().getName() + "\"...");

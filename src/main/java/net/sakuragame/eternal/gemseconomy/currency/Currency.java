@@ -9,6 +9,7 @@
 package net.sakuragame.eternal.gemseconomy.currency;
 
 import com.taylorswiftcn.justwei.util.UnitConvert;
+import net.sakuragame.eternal.gemseconomy.utils.UtilString;
 import org.bukkit.ChatColor;
 
 import java.util.UUID;
@@ -69,9 +70,9 @@ public class Currency {
             amt.append(this.getSymbol());
         }
         if (this.isDecimalSupported()) {
-            amt.append(UnitConvert.getFormatLong((long) amount));
+            amt.append(amount < 10000 ? UtilString.format(amount) : UnitConvert.formatEN(UnitConvert.TenThousand, amount, 2));
         } else {
-            amt.append(UnitConvert.getFormatLong((int) amount));
+            amt.append(amount < 10000 ? ((int) amount) : UnitConvert.formatEN(UnitConvert.TenThousand, amount));
         }
         amt.append(" ");
         amt.append(color);

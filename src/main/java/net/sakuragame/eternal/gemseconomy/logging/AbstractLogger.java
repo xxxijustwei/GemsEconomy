@@ -126,7 +126,7 @@ public abstract class AbstractLogger {
             StringBuilder builder = new StringBuilder();
             appendDate(builder);
             StackTraceElement element = ex.getStackTrace()[0];
-            builder.append('[').append(ex.toString()).append(']').append(' ');
+            builder.append('[').append(ex).append(']').append(' ');
             builder.append('[').append("ERROR - ").append(ex.getMessage()).append(" -- ").append(element.getFileName())
                     .append(" where ").append(element.getMethodName()).append(" at ").append(element.getLineNumber())
                     .append(']').append(' ');

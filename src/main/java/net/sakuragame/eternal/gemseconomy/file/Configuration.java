@@ -38,12 +38,8 @@ public class Configuration {
 
         String path = "Messages.";
 
-        config.addDefault("storage", "mysql");
         config.addDefault("debug", false);
         config.addDefault("vault", true);
-        config.addDefault("transaction_log", true);
-
-      //  config.addDefault("sqlite.file", "database.sqlite");
 
         config.addDefault(path + "prefix", "&2&lGemsEconomy> ");
         config.addDefault(path + "nopermission", "&7You don't have permission to do this.");

@@ -1,4 +1,4 @@
-package net.sakuragame.eternal.gemseconomy.data.mysql;
+package net.sakuragame.eternal.gemseconomy.storage;
 
 import net.sakuragame.serversystems.manage.client.api.ClientManagerAPI;
 

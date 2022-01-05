@@ -6,7 +6,7 @@
  * Thank you.
  */
 
-package net.sakuragame.eternal.gemseconomy.data;
+package net.sakuragame.eternal.gemseconomy.storage;
 
 import net.sakuragame.eternal.gemseconomy.GemsEconomy;
 import net.sakuragame.eternal.gemseconomy.account.Account;
@@ -26,21 +26,6 @@ public abstract class DataStorage {
     public DataStorage(String name, boolean topSupported) {
         this.name = name;
         this.topSupported = topSupported;
-    }
-
-    private final static ArrayList<DataStorage> methods = new ArrayList<>();
-
-    public static DataStorage getMethod(String name) {
-        for (DataStorage store : getMethods()) {
-            if (store.getName().equalsIgnoreCase(name)) {
-                return store;
-            }
-        }
-        return null;
-    }
-
-    public static ArrayList<DataStorage> getMethods() {
-        return methods;
     }
 
     public abstract void initialize();
