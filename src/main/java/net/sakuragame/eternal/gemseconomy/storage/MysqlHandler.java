@@ -237,14 +237,14 @@ public class MysqlHandler extends DataStorage {
     }
 
     @Override
-    public void updateCurrency(UUID uuid, Currency currency, double amount) {
+    public void updateBalance(UUID uuid, Currency currency, double amount) {
         int uid = ClientManagerAPI.getUserID(uuid);
         if (uid == -1) return;
 
         dataManager.executeReplace(
                 EconomyTables.ECONOMY_ACCOUNT.getTableName(),
                 new String[] {"uid", "currency", "balance"},
-                new Object[] {uuid.toString(), currency.getUUID().toString(), amount}
+                new Object[] {uid, currency.getUUID().toString(), amount}
         );
     }
 

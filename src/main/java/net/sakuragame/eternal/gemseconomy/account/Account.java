@@ -103,7 +103,7 @@ public class Account {
 
     public void modifyBalance(Currency currency, double amount){
         getBalances().put(currency, amount);
-        SchedulerUtils.runAsync(() -> GemsEconomy.getInstance().getDataStore().updateCurrency(uuid, currency, amount));
+        SchedulerUtils.runAsync(() -> GemsEconomy.getInstance().getDataStore().updateBalance(uuid, currency, amount));
     }
 
     public double getBalance(Currency currency) {

@@ -49,7 +49,7 @@ public abstract class DataStorage {
 
     public abstract void deleteAccount(Account account);
 
-    public abstract void updateCurrency(UUID uuid, Currency currency, double amount);
+    public abstract void updateBalance(UUID uuid, Currency currency, double amount);
 
     public abstract void createAccount(Account account);
 
