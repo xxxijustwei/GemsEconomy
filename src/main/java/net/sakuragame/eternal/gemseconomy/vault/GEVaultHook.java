@@ -14,7 +14,9 @@ import net.sakuragame.eternal.gemseconomy.currency.Currency;
 import net.sakuragame.eternal.gemseconomy.utils.UtilServer;
 import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -212,7 +214,9 @@ public class GEVaultHook extends AbstractEconomy {
 
     @Override
     public boolean createPlayerAccount(String playerName) {
-        GemsEconomy.getInstance().getAccountManager().createAccount(playerName);
+        Player player = Bukkit.getPlayerExact(playerName);
+        if (player == null) return false;
+        GemsEconomy.getInstance().getAccountManager().createAccount(player);
         return true;
     }
 

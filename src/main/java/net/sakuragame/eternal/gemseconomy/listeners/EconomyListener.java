@@ -31,12 +31,14 @@ public class EconomyListener implements Listener {
         if (event.getResult() != PlayerLoginEvent.Result.ALLOWED) return;
 
         SchedulerUtils.runAsync(() -> {
-            Account account = plugin.getAccountManager().getAccount(player.getUniqueId());
+            Account account = plugin.getAccountManager().getAccount(player.getUniqueId(), true);
 
-            if (account != null) return;
+            if (account == null) {
+                plugin.getAccountManager().createAccount(player);
+                return;
+            }
 
-            account = new Account(player.getUniqueId(), player.getName());
-            plugin.getDataStore().saveAccount(account);
+            plugin.getAccountManager().add(account);
             UtilServer.consoleLog("New Account created for: " + account.getDisplayName());
         });
     }
@@ -50,14 +52,6 @@ public class EconomyListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
-        // Caching
-        SchedulerUtils.run(() -> {
-            Account account = plugin.getAccountManager().getAccount(player.getUniqueId());
-            if (account != null) {
-                plugin.getAccountManager().add(account);
-            }
-        });
 
         SchedulerUtils.runLater(40L, () -> {
             if (GemsEconomy.getCurrencyManager().getDefaultCurrency() == null && (player.isOp() || player.hasPermission("gemseconomy.command.currency"))) {

@@ -10,10 +10,8 @@ package net.sakuragame.eternal.gemseconomy.account;
 
 import net.sakuragame.eternal.gemseconomy.GemsEconomy;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
-import net.sakuragame.eternal.gemseconomy.storage.Callback;
 import net.sakuragame.eternal.gemseconomy.utils.SchedulerUtils;
 import net.sakuragame.eternal.gemseconomy.utils.UtilServer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -30,19 +28,16 @@ public class AccountManager {
         this.plugin = plugin;
         this.accounts = new ArrayList<>();
     }
-    
-    public void createAccount(String nickname) {
+
+    public void createAccount(Player player) {
         SchedulerUtils.runAsync(() -> {
-            Account account = getAccount(nickname);
+            Account account = new Account(player.getUniqueId(), player.getName());
+            account.initBalance();
 
-            if (account == null) {
-                account = new Account(UUID.randomUUID(), nickname);
-                add(account);
-                account.setCanReceiveCurrency(true);
+            add(account);
+            plugin.getDataStore().createAccount(account);
 
-                plugin.getDataStore().saveAccount(account);
-                UtilServer.consoleLog("New Account created for: " + account.getDisplayName());
-            }
+            UtilServer.consoleLog("New Account created for: " + account.getDisplayName());
         });
     }
 
