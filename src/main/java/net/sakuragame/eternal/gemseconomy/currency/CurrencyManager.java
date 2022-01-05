@@ -2,6 +2,7 @@ package net.sakuragame.eternal.gemseconomy.currency;
 
 import com.google.common.collect.Lists;
 import net.sakuragame.eternal.gemseconomy.GemsEconomy;
+import net.sakuragame.eternal.gemseconomy.utils.SchedulerUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -72,7 +73,21 @@ public class CurrencyManager {
 
         add(currency);
 
-        plugin.getDataStore().saveCurrency(currency);
+        SchedulerUtils.runAsync(() -> plugin.getDataStore().saveCurrency(currency));
+    }
+
+    public void createNewCurrency(Currency currency, boolean def) {
+        if (currencyExist(currency.getIdentifier())) {
+            return;
+        }
+
+        if(currencies.size() == 0 || def) {
+            currency.setDefaultCurrency(true);
+        }
+
+        add(currency);
+
+        SchedulerUtils.runAsync(() -> plugin.getDataStore().saveCurrency(currency));
     }
 
     public void deleteCurrency(Currency currency) {

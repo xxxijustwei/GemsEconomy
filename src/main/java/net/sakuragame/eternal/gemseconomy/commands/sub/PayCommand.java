@@ -117,8 +117,8 @@ public class PayCommand extends SubCommand {
 
         double payerBal = payer.getBalance(currency) - amount;
         double payeeBal = payee.getBalance(currency) + amount;
-        payer.modifyBalance(currency, payerBal, true);
-        payee.modifyBalance(currency, payeeBal, true);
+        payer.modifyBalance(currency, payerBal);
+        payee.modifyBalance(currency, payeeBal);
         GemsEconomy.getInstance().getEconomyLogger().log("[PAYMENT] " + payer.getDisplayName() + " (New bal: " + currency.format(payerBal) + ") -> paid " + payee.getDisplayName() + " (New bal: " + currency.format(payeeBal) + ") - An amount of " + currency.format(amount));
 
         if (Bukkit.getPlayer(payee.getUUID()) != null) {

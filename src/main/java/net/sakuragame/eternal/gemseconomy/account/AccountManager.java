@@ -9,9 +9,11 @@
 package net.sakuragame.eternal.gemseconomy.account;
 
 import net.sakuragame.eternal.gemseconomy.GemsEconomy;
+import net.sakuragame.eternal.gemseconomy.storage.Callback;
 import net.sakuragame.eternal.gemseconomy.utils.SchedulerUtils;
 import net.sakuragame.eternal.gemseconomy.utils.UtilServer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -37,14 +39,7 @@ public class AccountManager {
                 add(account);
                 account.setCanReceiveCurrency(true);
 
-                if (!plugin.getDataStore().getName().equalsIgnoreCase("yaml")) {
-                    // MYSQL
-                    plugin.getDataStore().createAccount(account);
-                } else {
-                    // YAML
-                    plugin.getDataStore().saveAccount(account);
-                }
-
+                plugin.getDataStore().saveAccount(account);
                 UtilServer.consoleLog("New Account created for: " + account.getDisplayName());
             }
         });
@@ -63,11 +58,24 @@ public class AccountManager {
     }
 
     public Account getAccount(UUID uuid) {
-        for (Account account : this.accounts) { // This throws CME randomly
+        return getAccount(uuid, false);
+    }
+
+    public Account getAccount(UUID uuid, boolean Offline) {
+        for (Account account : this.accounts) {
             if (!account.getUUID().equals(uuid)) continue;
             return account;
         }
-        return plugin.getDataStore().loadAccount(uuid);
+
+        if (Offline) {
+            if (Bukkit.isPrimaryThread()) {
+                UtilServer.consoleLog("If the Offline parameter of getAccount is true, execute it in asynchronous mode!");
+                return null;
+            }
+            return plugin.getDataStore().loadAccount(uuid);
+        }
+
+        return null;
     }
 
     public void removeAccount(UUID uuid){
@@ -88,10 +96,6 @@ public class AccountManager {
 
     public List<Account> getAccounts() {
         return accounts;
-    }
-
-    public List<Account> getAllAccounts() {
-        return plugin.getDataStore().getOfflineAccounts();
     }
 }
 

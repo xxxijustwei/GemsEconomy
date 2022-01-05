@@ -12,30 +12,30 @@ import net.sakuragame.eternal.gemseconomy.GemsEconomy;
 import net.sakuragame.eternal.gemseconomy.account.Account;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
 import net.sakuragame.eternal.gemseconomy.currency.EternalCurrency;
+import net.sakuragame.eternal.gemseconomy.storage.Callback;
 
 import java.util.UUID;
 
 public class GemsEconomyAPI {
 
     public final static GemsEconomy plugin = GemsEconomy.getInstance();
-
-    /**
-     *
-     * @param uuid - The users unique ID.
-     * @param amount - An amount of the default currency.
-     */
-    public static void deposit(UUID uuid, double amount){
-        Account acc = plugin.getAccountManager().getAccount(uuid);
-        acc.deposit(GemsEconomy.getCurrencyManager().getDefaultCurrency(), amount);
+    
+    public static Currency getDefaultCurrency() {
+        return GemsEconomy.getCurrencyManager().getDefaultCurrency();
     }
 
+    public static void deposit(UUID uuid, double amount){
+        Account account = plugin.getAccountManager().getAccount(uuid);
+        Currency def = getDefaultCurrency();
 
-    /**
-     *
-     * @param uuid - The users unique ID.
-     * @param amount - An amount of a currency, if the currency is null, the default will be used.
-     * @param eCurrency - A eternal-land currency.
-     */
+        if (account == null) {
+            depositOffline(uuid, amount, def);
+            return;
+        }
+
+        account.deposit(def, amount);
+    }
+    
     public static void deposit(UUID uuid, double amount, EternalCurrency eCurrency) {
         Currency currency = eCurrency.getCurrency();
         if (currency == null) return;
@@ -43,29 +43,35 @@ public class GemsEconomyAPI {
         deposit(uuid, amount, currency);
     }
 
-    /**
-     *
-     * @param uuid - The users unique ID.
-     * @param amount - An amount of a currency, if the currency is null, the default will be used.
-     * @param currency - A specified currency.
-     */
     public static void deposit(UUID uuid, double amount, Currency currency){
-        Account acc = plugin.getAccountManager().getAccount(uuid);
-        if(currency != null) {
-            acc.deposit(currency, amount);
-        }else{
-            acc.deposit(GemsEconomy.getCurrencyManager().getDefaultCurrency(), amount);
+        Account account = plugin.getAccountManager().getAccount(uuid);
+        currency = currency == null ? getDefaultCurrency() : currency;
+
+        if (account == null) {
+            depositOffline(uuid, amount, currency);
+            return;
         }
+
+        account.deposit(currency, amount);
     }
 
-    /**
-     *
-     * @param uuid - The users unique ID.
-     * @param amount - An amount of the default currency.
-     */
+    private static void depositOffline(UUID uuid, double amount, Currency currency) {
+        plugin.getDataStore().loadAccount(uuid, account -> {
+            if (account == null) return;
+            account.deposit(currency, amount);
+        });
+    }
+
     public static void withdraw(UUID uuid, double amount){
-        Account acc = plugin.getAccountManager().getAccount(uuid);
-        acc.withdraw(GemsEconomy.getCurrencyManager().getDefaultCurrency(), amount);
+        Account account = plugin.getAccountManager().getAccount(uuid);
+        Currency def = getDefaultCurrency();
+        
+        if (account == null) {
+            withdrawOffline(uuid, amount, def);
+            return;
+        }
+
+        account.withdraw(def, amount);
     }
 
     public static void withdraw(UUID uuid, double amount, EternalCurrency eCurrency) {
@@ -75,29 +81,28 @@ public class GemsEconomyAPI {
         withdraw(uuid, amount, currency);
     }
 
-    /**
-     *
-     * @param uuid - The users unique ID.
-     * @param amount - An amount of the currency.
-     * @param currency - The currency you withdraw from.
-     */
     public static void withdraw(UUID uuid, double amount, Currency currency){
-        Account acc = plugin.getAccountManager().getAccount(uuid);
-        if(currency != null) {
-            acc.withdraw(currency, amount);
-        }else{
-            acc.withdraw(GemsEconomy.getCurrencyManager().getDefaultCurrency(), amount);
+        Account account = plugin.getAccountManager().getAccount(uuid);
+        currency = currency == null ? getDefaultCurrency() : currency;
+        
+        if (account == null) {
+            withdrawOffline(uuid, amount, currency);
+            return;
         }
+
+        account.withdraw(currency, amount);
     }
 
-    /**
-     *
-     * @param uuid - The users unique ID.
-     * @return - The default currency balance of the user.
-     */
+    private static void withdrawOffline(UUID uuid, double amount, Currency currency) {
+        plugin.getDataStore().loadAccount(uuid, account -> {
+            if (account == null) return;
+            account.withdraw(currency, amount);
+        });
+    }
+
     public static double getBalance(UUID uuid){
-        Account acc = plugin.getAccountManager().getAccount(uuid);
-        return acc.getBalance(GemsEconomy.getCurrencyManager().getDefaultCurrency());
+        Account account = plugin.getAccountManager().getAccount(uuid);
+        return account.getBalance(getDefaultCurrency());
     }
 
     public static double getBalance(UUID uuid, EternalCurrency eCurrency) {
@@ -107,26 +112,24 @@ public class GemsEconomyAPI {
         return getBalance(uuid, currency);
     }
 
-    /**
-     *
-     * @param uuid - The users unique ID.
-     * @param currency - An amount of the default currency.
-     * @return - The balance of the specified currency.
-     */
     public static double getBalance(UUID uuid, Currency currency) {
-        Account acc = plugin.getAccountManager().getAccount(uuid);
-        if (currency != null) {
-            return acc.getBalance(currency);
-        }else{
-            return acc.getBalance(GemsEconomy.getCurrencyManager().getDefaultCurrency());
-        }
+        Account account = plugin.getAccountManager().getAccount(uuid);
+        currency = currency == null ? getDefaultCurrency() : currency;
+
+        if (account == null) return 0;
+
+        return account.getBalance(currency);
     }
 
-    /**
-     *
-     * @param identifier - Currency identifier.
-     * @return - Currency Object.
-     */
+    public static double getOfflineBalance(UUID uuid, Currency currency) {
+        Account account = plugin.getAccountManager().getAccount(uuid, true);
+        currency = currency == null ? getDefaultCurrency() : currency;
+
+        if (account == null) return 0;
+
+        return account.getBalance(currency);
+    }
+
     public static Currency getCurrency(String identifier){
         if(GemsEconomy.getCurrencyManager().getCurrency(identifier) != null){
             return GemsEconomy.getCurrencyManager().getCurrency(identifier);

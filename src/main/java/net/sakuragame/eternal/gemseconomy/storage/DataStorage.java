@@ -52,15 +52,11 @@ public abstract class DataStorage {
 
     public abstract void deleteAccount(Account account);
 
-    /**
-     * This is MYSQL ONLY!
-     * @param account - Account to save to sql. See EconomyListener.java
-     */
+    public abstract void updateCurrency(UUID uuid, Currency currency, double amount);
+
     public abstract void createAccount(Account account);
 
     public abstract void addAccountCurrencies(UUID uuid, String name, List<Currency> currencies);
-
-    public abstract ArrayList<Account> getOfflineAccounts();
 
     public String getName() {
         return this.name;

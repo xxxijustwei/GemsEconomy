@@ -53,7 +53,7 @@ public class Account {
             if(event.isCancelled())return false;
 
             double finalAmount = getBalance(currency) - amount;
-            this.modifyBalance(currency, finalAmount, true);
+            this.modifyBalance(currency, finalAmount);
             GemsEconomy.getInstance().getEconomyLogger().log("[WITHDRAW] Account: " + getDisplayName() + " were withdrawn: " + currency.format(amount) + " and now has " + currency.format(finalAmount));
             return true;
         }
@@ -66,11 +66,11 @@ public class Account {
         }
         if (canReceiveCurrency()) {
             GemsTransactionEvent event = new GemsTransactionEvent(currency, this, amount, TranactionType.DEPOSIT);
-            SchedulerUtils.run(() -> Bukkit.getPluginManager().callEvent(event));
+            Bukkit.getPluginManager().callEvent(event);
             if(event.isCancelled())return false;
 
             double finalAmount = getBalance(currency) + amount;
-            this.modifyBalance(currency, finalAmount, true);
+            this.modifyBalance(currency, finalAmount);
             GemsEconomy.getInstance().getEconomyLogger().log("[DEPOSIT] Account: " + getDisplayName() + " were deposited: " + currency.format(amount) + " and now has " + currency.format(finalAmount));
             return true;
         }
@@ -79,28 +79,15 @@ public class Account {
 
     public void setBalance(Currency currency, double amount) {
         GemsTransactionEvent event = new GemsTransactionEvent(currency, this, amount, TranactionType.SET);
-        SchedulerUtils.run(() -> Bukkit.getPluginManager().callEvent(event));
+        Bukkit.getPluginManager().callEvent(event);
         if(event.isCancelled())return;
 
-        getBalances().put(currency, amount);
-        GemsEconomy.getInstance().getEconomyLogger().log("[BALANCE SET] Account: " + getDisplayName() + " were set to: " + currency.format(amount));
-        GemsEconomy.getInstance().getDataStore().saveAccount(this);
+        modifyBalance(currency, amount);
     }
 
-    /**
-     * DO NOT USE UNLESS YOU HAVE VIEWED WHAT THIS DOES!
-     *
-     * This directly modifies the account balance for a currency, with the option of saving.
-     *
-     * @param currency - Currency to modify
-     * @param amount - Amount of cash to modify.
-     * @param save - Save the account or not. Should be done async!
-     */
-    public void modifyBalance(Currency currency, double amount, boolean save){
+    public void modifyBalance(Currency currency, double amount){
         getBalances().put(currency, amount);
-        if(save){
-            GemsEconomy.getInstance().getDataStore().saveAccount(this);
-        }
+        SchedulerUtils.runAsync(() -> GemsEconomy.getInstance().getDataStore().updateCurrency(uuid, currency, amount));
     }
 
     public double getBalance(Currency currency) {

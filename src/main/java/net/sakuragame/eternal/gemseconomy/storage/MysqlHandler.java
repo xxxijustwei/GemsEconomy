@@ -166,6 +166,7 @@ public class MysqlHandler extends DataStorage {
     @Override
     public Account loadAccount(UUID uuid) {
         int uid = ClientManagerAPI.getUserID(uuid);
+        if (uid == -1) return null;
 
         String name = ClientManagerAPI.getUserName(uid);
         Account account = new Account(uuid, name);
@@ -209,6 +210,7 @@ public class MysqlHandler extends DataStorage {
     @Override
     public void saveAccount(Account account) {
         int uid = ClientManagerAPI.getUserID(account.getUUID());
+        if (uid == -1) return;
 
         List<Object[]> datum = new ArrayList<>();
         for (Currency currency : account.getBalances().keySet()) {
@@ -233,8 +235,22 @@ public class MysqlHandler extends DataStorage {
     }
 
     @Override
+    public void updateCurrency(UUID uuid, Currency currency, double amount) {
+        int uid = ClientManagerAPI.getUserID(uuid);
+        if (uid == -1) return;
+
+        dataManager.executeReplace(
+                EconomyTables.ECONOMY_ACCOUNT.getTableName(),
+                new String[] {"uid", "currency", "balance"},
+                new Object[] {uuid.toString(), currency.getUUID().toString(), amount}
+        );
+    }
+
+    @Override
     public void deleteAccount(Account account) {
         int uid = ClientManagerAPI.getUserID(account.getUUID());
+        if (uid == -1) return;
+
         dataManager.executeDelete(
                 EconomyTables.ECONOMY_ACCOUNT.getTableName(),
                 "uid",
@@ -296,10 +312,5 @@ public class MysqlHandler extends DataStorage {
                 },
                 datum
         );
-    }
-
-    @Override
-    public ArrayList<Account> getOfflineAccounts() {
-        return null;
     }
 }
