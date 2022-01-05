@@ -36,7 +36,7 @@ public class GemsEconomyAPI {
         account.deposit(def, amount, null);
     }
 
-    public static void deposit(UUID uuid, double amount, String loggerContent){
+    public static void deposit(UUID uuid, double amount, String reason){
         Account account = plugin.getAccountManager().getAccount(uuid);
         Currency def = getDefaultCurrency();
 
@@ -45,25 +45,25 @@ public class GemsEconomyAPI {
             return;
         }
 
-        account.deposit(def, amount, loggerContent);
+        account.deposit(def, amount, reason);
     }
 
     public static void deposit(UUID uuid, double amount, EternalCurrency eCurrency) {
         deposit(uuid, amount, eCurrency, null);
     }
     
-    public static void deposit(UUID uuid, double amount, EternalCurrency eCurrency, String loggerContent) {
+    public static void deposit(UUID uuid, double amount, EternalCurrency eCurrency, String reason) {
         Currency currency = eCurrency.getCurrency();
         if (currency == null) return;
 
-        deposit(uuid, amount, currency, loggerContent);
+        deposit(uuid, amount, currency, reason);
     }
 
     public static void deposit(UUID uuid, double amount, Currency currency) {
         deposit(uuid, amount, currency, null);
     }
 
-    public static void deposit(UUID uuid, double amount, Currency currency, String loggerContent) {
+    public static void deposit(UUID uuid, double amount, Currency currency, String reason) {
         Account account = plugin.getAccountManager().getAccount(uuid);
         currency = currency == null ? getDefaultCurrency() : currency;
 
@@ -72,7 +72,7 @@ public class GemsEconomyAPI {
             return;
         }
 
-        account.deposit(currency, amount, loggerContent);
+        account.deposit(currency, amount, reason);
     }
 
     private static void depositOffline(UUID uuid, double amount, Currency currency) {
@@ -94,7 +94,7 @@ public class GemsEconomyAPI {
         account.withdraw(def, amount);
     }
 
-    public static void withdraw(UUID uuid, double amount, String loggerContent){
+    public static void withdraw(UUID uuid, double amount, String reason){
         Account account = plugin.getAccountManager().getAccount(uuid);
         Currency def = getDefaultCurrency();
 
@@ -103,25 +103,25 @@ public class GemsEconomyAPI {
             return;
         }
 
-        account.withdraw(def, amount, loggerContent);
+        account.withdraw(def, amount, reason);
     }
 
     public static void withdraw(UUID uuid, double amount, EternalCurrency eCurrency) {
         withdraw(uuid, amount, eCurrency, null);
     }
 
-    public static void withdraw(UUID uuid, double amount, EternalCurrency eCurrency, String loggerContent) {
+    public static void withdraw(UUID uuid, double amount, EternalCurrency eCurrency, String reason) {
         Currency currency = eCurrency.getCurrency();
         if (currency == null) return;
 
-        withdraw(uuid, amount, currency, loggerContent);
+        withdraw(uuid, amount, currency, reason);
     }
 
     public static void withdraw(UUID uuid, double amount, Currency currency){
         withdraw(uuid, amount, currency, null);
     }
 
-    public static void withdraw(UUID uuid, double amount, Currency currency, String loggerContent){
+    public static void withdraw(UUID uuid, double amount, Currency currency, String reason){
         Account account = plugin.getAccountManager().getAccount(uuid);
         currency = currency == null ? getDefaultCurrency() : currency;
 
@@ -130,7 +130,7 @@ public class GemsEconomyAPI {
             return;
         }
 
-        account.withdraw(currency, amount, loggerContent);
+        account.withdraw(currency, amount, reason);
     }
 
     private static void withdrawOffline(UUID uuid, double amount, Currency currency) {

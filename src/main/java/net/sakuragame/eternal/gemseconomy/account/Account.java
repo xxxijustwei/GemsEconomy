@@ -47,7 +47,7 @@ public class Account {
         return withdraw(currency, amount, null);
     }
 
-    public boolean withdraw(Currency currency, double amount, String loggerContent) {
+    public boolean withdraw(Currency currency, double amount, String reason) {
         if (!currency.isDecimalSupported()) {
             amount = (int) amount;
         }
@@ -59,8 +59,8 @@ public class Account {
             double finalAmount = getBalance(currency) - amount;
             this.modifyBalance(currency, finalAmount);
 
-            if (loggerContent != null) {
-                GemsEconomy.getInstance().getAccountManager().addEconomyLogger(uuid, currency, amount * -1, loggerContent);
+            if (reason != null) {
+                GemsEconomy.getInstance().getAccountManager().addEconomyLogger(uuid, currency, amount * -1, reason);
             }
 
             return true;
@@ -72,7 +72,7 @@ public class Account {
         return deposit(currency, amount, null);
     }
 
-    public boolean deposit(Currency currency, double amount, String loggerContent) {
+    public boolean deposit(Currency currency, double amount, String reason) {
         if (!currency.isDecimalSupported()) {
             amount = (int) amount;
         }
@@ -84,8 +84,8 @@ public class Account {
             double finalAmount = getBalance(currency) + amount;
             this.modifyBalance(currency, finalAmount);
 
-            if (loggerContent != null) {
-                GemsEconomy.getInstance().getAccountManager().addEconomyLogger(uuid, currency, amount, loggerContent);
+            if (reason != null) {
+                GemsEconomy.getInstance().getAccountManager().addEconomyLogger(uuid, currency, amount, reason);
             }
 
             return true;
