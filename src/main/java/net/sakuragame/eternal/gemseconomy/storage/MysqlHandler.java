@@ -117,6 +117,8 @@ public class MysqlHandler extends DataStorage {
                         currency.getColor().name()
                 }
         );
+
+        plugin.getUpdateForwarder().updateCurrency(currency.getUUID());
     }
 
     @Override

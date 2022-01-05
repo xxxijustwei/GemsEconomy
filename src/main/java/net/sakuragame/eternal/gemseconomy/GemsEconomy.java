@@ -10,22 +10,20 @@ package net.sakuragame.eternal.gemseconomy;
 
 import net.sakuragame.eternal.gemseconomy.account.AccountManager;
 import net.sakuragame.eternal.gemseconomy.bungee.UpdateForwarder;
+import net.sakuragame.eternal.gemseconomy.commands.BalanceMainCommand;
 import net.sakuragame.eternal.gemseconomy.commands.CurrencyCommand;
+import net.sakuragame.eternal.gemseconomy.commands.EconomyCommand;
+import net.sakuragame.eternal.gemseconomy.commands.PayMainCommand;
 import net.sakuragame.eternal.gemseconomy.currency.CurrencyManager;
-import net.sakuragame.eternal.gemseconomy.storage.DataStorage;
-import net.sakuragame.eternal.gemseconomy.storage.MysqlHandler;
 import net.sakuragame.eternal.gemseconomy.file.Configuration;
 import net.sakuragame.eternal.gemseconomy.hook.EconomyPlaceholder;
 import net.sakuragame.eternal.gemseconomy.listeners.EconomyListener;
 import net.sakuragame.eternal.gemseconomy.logging.EconomyLogger;
+import net.sakuragame.eternal.gemseconomy.storage.DataStorage;
+import net.sakuragame.eternal.gemseconomy.storage.MysqlHandler;
 import net.sakuragame.eternal.gemseconomy.utils.UtilServer;
 import net.sakuragame.eternal.gemseconomy.vault.VaultHandler;
-import net.sakuragame.eternal.gemseconomy.commands.BalanceMainCommand;
-import net.sakuragame.eternal.gemseconomy.commands.EconomyCommand;
-import net.sakuragame.eternal.gemseconomy.commands.PayMainCommand;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
 
 public class GemsEconomy extends JavaPlugin {
 
@@ -78,9 +76,6 @@ public class GemsEconomy extends JavaPlugin {
         } else {
             UtilServer.consoleLog("Vault link is disabled.");
         }
-
-        this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", updateForwarder);
 
         if (isLogging()) {
             getEconomyLogger().save();
