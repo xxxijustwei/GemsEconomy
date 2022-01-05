@@ -8,7 +8,6 @@
 
 package net.sakuragame.eternal.gemseconomy.utils;
 
-import net.sakuragame.eternal.gemseconomy.GemsEconomy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -22,7 +21,7 @@ public class UtilServer {
     private static final String Error_Prefix = "§c[G-Eco-Error] §f";
 
     public static void consoleLog(String message){
-        if(GemsEconomy.getInstance().isDebug()) getServer().getConsoleSender().sendMessage(Console_Prefix + colorize(message));
+        getServer().getConsoleSender().sendMessage(Console_Prefix + colorize(message));
     }
 
     public static void consoleLog(Throwable message){
