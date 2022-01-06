@@ -35,11 +35,11 @@ public class EconomyListener implements Listener {
 
             if (account == null) {
                 plugin.getAccountManager().createAccount(player);
+                UtilServer.consoleLog("New Account created for: " + player.getName());
                 return;
             }
 
             plugin.getAccountManager().add(account);
-            UtilServer.consoleLog("New Account created for: " + account.getDisplayName());
         });
     }
 
