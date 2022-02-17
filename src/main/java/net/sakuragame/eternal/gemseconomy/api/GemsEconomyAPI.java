@@ -13,6 +13,7 @@ import net.sakuragame.eternal.gemseconomy.account.Account;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
 import net.sakuragame.eternal.gemseconomy.currency.EternalCurrency;
 import net.sakuragame.eternal.gemseconomy.storage.Callback;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -138,6 +139,14 @@ public class GemsEconomyAPI {
             if (account == null) return;
             account.withdraw(currency, amount);
         });
+    }
+
+    public static Account getAccount(Player player) {
+        return getAccount(player.getUniqueId());
+    }
+
+    public static Account getAccount(UUID uuid) {
+        return plugin.getAccountManager().getAccount(uuid);
     }
 
     public static double getBalance(UUID uuid){
