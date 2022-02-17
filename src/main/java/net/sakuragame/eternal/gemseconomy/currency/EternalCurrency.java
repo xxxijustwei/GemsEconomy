@@ -10,7 +10,8 @@ public enum EternalCurrency {
 
     Money("money", "Γ", "金币", true),
     Coins("coins", "☪", "点劵", false),
-    Points("points", "㊉", "神石", false);
+    Points("points", "㊉", "神石", false),
+    Fish("fish", "ω", "钓鱼点数", false);
 
     private final String identifier;
     private final String symbol;
