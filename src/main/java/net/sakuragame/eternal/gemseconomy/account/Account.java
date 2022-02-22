@@ -52,12 +52,15 @@ public class Account {
             amount = (int) amount;
         }
         if (hasEnough(currency, amount)) {
-            GemsTransactionEvent event = new GemsTransactionEvent(currency, this, amount, TranactionType.WITHDRAW);
-            SchedulerUtils.run(() -> Bukkit.getPluginManager().callEvent(event));
-            if(event.isCancelled())return false;
+            GemsTransactionEvent.Pre preEvent = new GemsTransactionEvent.Pre(this, currency, amount, TranactionType.WITHDRAW);
+            SchedulerUtils.run(preEvent::call);
+            if(preEvent.isCancelled()) return false;
 
             double finalAmount = getBalance(currency) - amount;
             this.modifyBalance(currency, finalAmount);
+
+            GemsTransactionEvent.Post postEvent = new GemsTransactionEvent.Post(this, currency, TranactionType.WITHDRAW);
+            SchedulerUtils.run(postEvent::call);
 
             if (reason != null) {
                 GemsEconomy.getInstance().getAccountManager().addEconomyLogger(uuid, currency, amount * -1, reason);
@@ -77,12 +80,15 @@ public class Account {
             amount = (int) amount;
         }
         if (canReceiveCurrency()) {
-            GemsTransactionEvent event = new GemsTransactionEvent(currency, this, amount, TranactionType.DEPOSIT);
-            Bukkit.getPluginManager().callEvent(event);
-            if(event.isCancelled())return false;
+            GemsTransactionEvent.Pre preEvent = new GemsTransactionEvent.Pre(this, currency, amount, TranactionType.DEPOSIT);
+            SchedulerUtils.run(preEvent::call);
+            if(preEvent.isCancelled()) return false;
 
             double finalAmount = getBalance(currency) + amount;
             this.modifyBalance(currency, finalAmount);
+
+            GemsTransactionEvent.Post postEvent = new GemsTransactionEvent.Post(this, currency, TranactionType.DEPOSIT);
+            SchedulerUtils.run(postEvent::call);
 
             if (reason != null) {
                 GemsEconomy.getInstance().getAccountManager().addEconomyLogger(uuid, currency, amount, reason);
@@ -94,11 +100,14 @@ public class Account {
     }
 
     public void setBalance(Currency currency, double amount) {
-        GemsTransactionEvent event = new GemsTransactionEvent(currency, this, amount, TranactionType.SET);
-        Bukkit.getPluginManager().callEvent(event);
-        if(event.isCancelled())return;
+        GemsTransactionEvent.Pre preEvent = new GemsTransactionEvent.Pre(this, currency, amount, TranactionType.SET);
+        preEvent.call();
+        if(preEvent.isCancelled()) return;
 
         modifyBalance(currency, amount);
+
+        GemsTransactionEvent.Post postEvent = new GemsTransactionEvent.Post(this, currency, TranactionType.SET);
+        postEvent.call();
     }
 
     public void modifyBalance(Currency currency, double amount){

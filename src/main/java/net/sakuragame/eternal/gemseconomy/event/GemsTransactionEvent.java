@@ -1,65 +1,37 @@
 package net.sakuragame.eternal.gemseconomy.event;
 
+import lombok.Getter;
 import net.sakuragame.eternal.gemseconomy.account.Account;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
 import net.sakuragame.eternal.gemseconomy.utils.TranactionType;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
-public class GemsTransactionEvent extends Event implements Cancellable {
+public class GemsTransactionEvent {
 
-    private static final HandlerList handlerList = new HandlerList();
-    private final Currency currency;
-    private final Account account;
-    private final double amount;
-    private final TranactionType type;
-    private boolean cancel;
+    @Getter
+    public static class Pre extends JustEvent {
 
-    public GemsTransactionEvent(Currency currency, Account account, double amount, TranactionType type) {
-        super();
-        this.currency = currency;
-        this.account = account;
-        this.amount = amount;
-        this.type = type;
+        private final double amount;
+        private final TranactionType type;
+
+        public Pre(Account account, Currency currency, double amount, TranactionType type) {
+            super(account, currency);
+            this.amount = amount;
+            this.type = type;
+        }
+
+        public String getAmountFormatted(){
+            return getCurrency().format(getAmount());
+        }
     }
 
-    public Currency getCurrency() {
-        return currency;
-    }
+    @Getter
+    public static class Post extends JustEvent {
 
-    public Account getAccount() {
-        return account;
-    }
+        private final TranactionType type;
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public String getAmountFormatted(){
-        return getCurrency().format(getAmount());
-    }
-
-    public TranactionType getType() {
-        return type;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlerList;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlerList;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancel;
-    }
-
-    @Override
-    public void setCancelled(boolean b) {
-        this.cancel = b;
+        public Post(Account account, Currency currency, TranactionType type) {
+            super(account, currency);
+            this.type = type;
+        }
     }
 }
