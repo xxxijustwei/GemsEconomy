@@ -7,8 +7,11 @@ import net.sakuragame.eternal.gemseconomy.account.Account;
 import net.sakuragame.eternal.gemseconomy.commands.CommandPerms;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
 import net.sakuragame.eternal.gemseconomy.file.Message;
+import net.sakuragame.serversystems.manage.client.api.ClientManagerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+
+import java.util.UUID;
 
 public class TakeCommand extends SubCommand {
 
@@ -49,8 +52,12 @@ public class TakeCommand extends SubCommand {
 
             Account account = plugin.getAccountManager().getAccount(user);
             if (account == null) {
-                sender.sendMessage(Message.getPlayerDoesNotExist());
-                return;
+                UUID uuid = ClientManagerAPI.getUserUUID(user);
+                if (uuid == null) {
+                    sender.sendMessage(Message.getPlayerDoesNotExist());
+                    return;
+                }
+                account = plugin.getAccountManager().getAccount(uuid, true);
             }
 
             if (account.withdraw(currency, amount)) {
