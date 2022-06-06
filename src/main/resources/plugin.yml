@@ -6,7 +6,7 @@ description: A multi-currency economy plugin for spigot servers!
 depend:
   - Vault
   - MegumiLib
-  - DataManager
+  - datamanager-bukkit-parent
   - PlaceholderAPI
 commands:
   balance:
