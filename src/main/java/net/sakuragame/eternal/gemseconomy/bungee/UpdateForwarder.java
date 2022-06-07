@@ -37,7 +37,7 @@ public class UpdateForwarder extends RedisMessageListener {
     }
 
     public void updateCurrency(UUID cid) {
-        ClientManagerAPI.getRedisManager().publish(plugin.getName(), CURRENCY_UPDATE_CHANNEL, cid.toString());
+        ClientManagerAPI.getRedisManager().publishAsync(plugin.getName(), CURRENCY_UPDATE_CHANNEL, cid.toString());
     }
 
 }
