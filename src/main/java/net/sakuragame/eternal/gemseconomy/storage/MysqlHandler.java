@@ -324,7 +324,7 @@ public class MysqlHandler extends DataStorage {
         dataManager.executeInsert(
                 EconomyTables.ECONOMY_LOGGER.getTableName(),
                 new String[] {"uid", "identifier", "change", "content"},
-                new Object[] {uuid.toString(), currency.getIdentifier(), amount, content}
+                new Object[] {uid, currency.getIdentifier(), amount, content}
         );
     }
 
