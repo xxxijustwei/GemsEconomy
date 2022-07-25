@@ -11,8 +11,10 @@ package net.sakuragame.eternal.gemseconomy.storage;
 import net.sakuragame.eternal.gemseconomy.GemsEconomy;
 import net.sakuragame.eternal.gemseconomy.account.Account;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
+import net.sakuragame.eternal.gemseconomy.currency.EternalCurrency;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public abstract class DataStorage {
@@ -27,7 +29,7 @@ public abstract class DataStorage {
 
     public abstract void initialize();
 
-    public abstract void close();
+    public abstract Map<Integer, Double> getAllBalance(EternalCurrency currency);
 
     public abstract void loadCurrencies();
 

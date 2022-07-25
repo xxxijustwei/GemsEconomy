@@ -3,6 +3,7 @@ package net.sakuragame.eternal.gemseconomy.storage;
 import net.sakuragame.eternal.gemseconomy.GemsEconomy;
 import net.sakuragame.eternal.gemseconomy.account.Account;
 import net.sakuragame.eternal.gemseconomy.currency.Currency;
+import net.sakuragame.eternal.gemseconomy.currency.EternalCurrency;
 import net.sakuragame.eternal.gemseconomy.utils.SchedulerUtils;
 import net.sakuragame.eternal.gemseconomy.utils.UtilServer;
 import net.sakuragame.serversystems.manage.api.database.DataManager;
@@ -33,8 +34,23 @@ public class MysqlHandler extends DataStorage {
     }
 
     @Override
-    public void close() {
+    public Map<Integer, Double> getAllBalance(EternalCurrency currency) {
+        Map<Integer, Double> map = new HashMap<>();
 
+        try (DatabaseQuery query = dataManager.createQuery(
+                EconomyTables.ECONOMY_ACCOUNT.getTableName(),
+                "currency", currency.getCurrency().getUUID()
+        )) {
+            ResultSet result = query.getResultSet();
+            int uid = result.getInt("uid");
+            double balance = result.getDouble("balance");
+
+            map.put(uid, balance);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return map;
     }
 
     @Override

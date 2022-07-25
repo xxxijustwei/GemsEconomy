@@ -6,7 +6,7 @@
 
     <groupId>net.sakuragame.eternal</groupId>
     <artifactId>GemsEconomy</artifactId>
-    <version>4.9.4-SNAPSHOT</version>
+    <version>4.9.5-SNAPSHOT</version>
 
     <build>
         <defaultGoal>package</defaultGoal>
