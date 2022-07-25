@@ -78,10 +78,6 @@ public class GemsEconomy extends JavaPlugin {
         disabling = true;
 
         if (isVault()) getVaultHandler().unhook();
-
-        if (getDataStore() != null) {
-            getDataStore().close();
-        }
     }
 
     public void initializeDataStore(boolean load) {
