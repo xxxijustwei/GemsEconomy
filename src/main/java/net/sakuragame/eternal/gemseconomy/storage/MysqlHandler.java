@@ -42,10 +42,12 @@ public class MysqlHandler extends DataStorage {
                 "currency", currency.getCurrency().getUUID()
         )) {
             ResultSet result = query.getResultSet();
-            int uid = result.getInt("uid");
-            double balance = result.getDouble("balance");
+            while (result.next()) {
+                int uid = result.getInt("uid");
+                double balance = result.getDouble("balance");
 
-            map.put(uid, balance);
+                map.put(uid, balance);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
